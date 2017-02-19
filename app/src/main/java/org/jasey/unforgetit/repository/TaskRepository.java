@@ -20,6 +20,8 @@ public abstract class TaskRepository {
         switch (type) {
             case DEFAULT:
                 return TaskRepositoryImpl.getInstance(context);
+            case JPA:
+                return TaskRepositoryJPAImpl.getInstance(context);
             default:
                 return null;
         }
@@ -34,6 +36,7 @@ public abstract class TaskRepository {
     public abstract List<Task> getAll();
 
     public enum Type {
-        DEFAULT
+        DEFAULT,
+        JPA
     }
 }
