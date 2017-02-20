@@ -24,6 +24,7 @@ public class TaskViewFragment extends Fragment {
 
     private static List<Task> mTaskList;
 
+    //сделать метод getInstance(DBAccessable)
 
     @Nullable
     @Override
