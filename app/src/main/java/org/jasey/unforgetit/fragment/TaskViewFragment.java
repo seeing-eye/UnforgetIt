@@ -30,7 +30,7 @@ public class TaskViewFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new TaskViewAdapter(getActivity());
+        mAdapter = TaskViewAdapter.getInstance(getActivity());
         mRecyclerView.setAdapter(mAdapter);
         return rootView;
     }

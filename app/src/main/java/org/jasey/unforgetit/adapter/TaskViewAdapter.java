@@ -19,7 +19,11 @@ import java.util.Date;
 public class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
 
-    public TaskViewAdapter(Context mContext) {
+    public static TaskViewAdapter getInstance(Context context) {
+        return new TaskViewAdapter(context);
+    }
+
+    private TaskViewAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
