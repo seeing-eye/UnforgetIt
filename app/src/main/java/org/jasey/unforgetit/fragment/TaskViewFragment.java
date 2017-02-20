@@ -1,6 +1,7 @@
 package org.jasey.unforgetit.fragment;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,14 +13,17 @@ import android.view.ViewGroup;
 import org.jasey.unforgetit.R;
 import org.jasey.unforgetit.adapter.TaskViewAdapter;
 import org.jasey.unforgetit.entity.Task;
-import org.jasey.unforgetit.utils.TaskUtil;
+import org.jasey.unforgetit.repository.TaskRepository;
+
+import java.util.List;
 
 public class TaskViewFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private static Task[] mTaskArray ;
+    private static List<Task> mTaskList;
+
 
     @Nullable
     @Override
@@ -35,8 +39,8 @@ public class TaskViewFragment extends Fragment {
         return rootView;
     }
 
-    public static Task[] buildTaskArray() {
-        mTaskArray = TaskUtil.getTestTaskArray();
-        return mTaskArray;
+    public static List<Task> getTasksFromDB(Context context) {
+        mTaskList = TaskRepository.getInstance(TaskRepository.Type.JPA, context).getAll();
+        return mTaskList;
     }
 }

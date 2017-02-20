@@ -11,7 +11,7 @@ import java.util.List;
 
 public abstract class TaskRepositoryTest {
 
-    protected TaskRepository repository;
+    TaskRepository repository;
 
     @NonNull
     private Task getTask() {
@@ -101,6 +101,21 @@ public abstract class TaskRepositoryTest {
         Assert.assertTrue(tasks.size() == 1);
         Assert.assertTrue(tasks.get(0).equals(task));
         repository.remove(task);
+    }
+
+    @Test
+    public void remove_all_test() {
+        for (Task t : repository.getAll()) {
+            repository.remove(t);
+        }
+        Assert.assertTrue(repository.getAll().isEmpty());
+    }
+
+    @Test
+    public void add_one_task_test() {
+        Task task = getTask();
+        repository.addNew(task);
+        Assert.assertTrue(repository.getAll().size() == 1);
     }
 
 

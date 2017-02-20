@@ -37,12 +37,12 @@ public class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         TaskViewHolder taskViewHolder = (TaskViewHolder) holder;
-        taskViewHolder.bind(TaskViewFragment.buildTaskArray()[position]);
+        taskViewHolder.bind(TaskViewFragment.getTasksFromDB(mContext).get(position));
     }
 
     @Override
     public int getItemCount() {
-        return TaskViewFragment.buildTaskArray().length;
+        return TaskViewFragment.getTasksFromDB(mContext).size();
     }
 
     /*Класс TaskViewHolder держит на готове ссылки на элементы виджетов CardView, которые он может наполнить данными из объекта Task в методе bind.
@@ -53,14 +53,14 @@ public class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private TextView mDateView;
         private Task mTask;
 
-        public TaskViewHolder(View v) {
+        TaskViewHolder(View v) {
             super(v);
             mCV = (CardView) v.findViewById(R.id.card_view);
             mTitleView = (TextView) v.findViewById(R.id.title);
             mDateView = (TextView) v.findViewById(R.id.date);
         }
 
-        public void bind(Task task) {
+        void bind(Task task) {
             mTask = task;
             mTitleView.setText(mTask.getTitle());
             mDateView.setText(TaskUtil.formatDate(mTask.getDate()));
