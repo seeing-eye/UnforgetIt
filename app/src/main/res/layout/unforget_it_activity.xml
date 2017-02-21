@@ -10,13 +10,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:mContext="org.jasey.unforgetit.UnforgetItActivity">
 
-    <fragment
-        android:id="@+id/task_view_fragment"
-        android:name="org.jasey.unforgetit.fragment.TaskViewFragment"
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        tools:layout="@layout/task_view_fragment">
-    </fragment>
+        android:layout_height="wrap_content">
+    </FrameLayout>
 
 </RelativeLayout>
+
+
+

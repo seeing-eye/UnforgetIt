@@ -11,15 +11,20 @@ import android.widget.TextView;
 
 import org.jasey.unforgetit.R;
 import org.jasey.unforgetit.entity.Task;
-import org.jasey.unforgetit.fragment.TaskViewFragment;
+import org.jasey.unforgetit.repository.TaskRepository;
 import org.jasey.unforgetit.utils.TaskUtil;
 
 import java.util.Date;
+import java.util.List;
 
 public class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
 
-    public TaskViewAdapter(Context mContext) {
+    public static TaskViewAdapter getInstance(Context context) {
+        return new TaskViewAdapter(context);
+    }
+
+    private TaskViewAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
@@ -33,12 +38,16 @@ public class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         TaskViewHolder taskViewHolder = (TaskViewHolder) holder;
-        taskViewHolder.bind(TaskViewFragment.buildTaskArray()[position]);
+        taskViewHolder.bind(findAllTasks().get(position));
+    }
+
+    private List<Task> findAllTasks() {
+        return TaskRepository.getInstance(TaskRepository.Type.JPA, mContext).getAll();
     }
 
     @Override
     public int getItemCount() {
-        return TaskViewFragment.buildTaskArray().length;
+        return findAllTasks().size();
     }
 
     /*Класс TaskViewHolder держит на готове ссылки на элементы виджетов CardView, которые он может наполнить данными из объекта Task в методе bind.
@@ -49,14 +58,14 @@ public class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private TextView mDateView;
         private Task mTask;
 
-        public TaskViewHolder(View v) {
+        TaskViewHolder(View v) {
             super(v);
             mCV = (CardView) v.findViewById(R.id.card_view);
             mTitleView = (TextView) v.findViewById(R.id.title);
             mDateView = (TextView) v.findViewById(R.id.date);
         }
 
-        public void bind(Task task) {
+        void bind(Task task) {
             mTask = task;
             mTitleView.setText(mTask.getTitle());
             mDateView.setText(TaskUtil.formatDate(mTask.getDate()));

@@ -11,32 +11,29 @@ import android.view.ViewGroup;
 
 import org.jasey.unforgetit.R;
 import org.jasey.unforgetit.adapter.TaskViewAdapter;
-import org.jasey.unforgetit.entity.Task;
-import org.jasey.unforgetit.utils.TaskUtil;
 
 public class TaskViewFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private static Task[] mTaskArray ;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.task_view_fragment, container, false);
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        return inflater.inflate(R.layout.task_view_fragment, container, false);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new TaskViewAdapter(getActivity());
+        mAdapter = TaskViewAdapter.getInstance(getActivity());
         mRecyclerView.setAdapter(mAdapter);
-        return rootView;
     }
 
-    public static Task[] buildTaskArray() {
-        mTaskArray = TaskUtil.getTestTaskArray();
-        return mTaskArray;
-    }
+
 }
