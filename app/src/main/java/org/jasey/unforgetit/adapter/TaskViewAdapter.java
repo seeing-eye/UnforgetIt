@@ -1,6 +1,5 @@
 package org.jasey.unforgetit.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -12,10 +11,11 @@ import android.widget.TextView;
 
 import org.jasey.unforgetit.R;
 import org.jasey.unforgetit.entity.Task;
-import org.jasey.unforgetit.fragment.TaskViewFragment;
+import org.jasey.unforgetit.repository.TaskRepository;
 import org.jasey.unforgetit.utils.TaskUtil;
 
 import java.util.Date;
+import java.util.List;
 
 public class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
@@ -38,12 +38,16 @@ public class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         TaskViewHolder taskViewHolder = (TaskViewHolder) holder;
-        taskViewHolder.bind(TaskViewFragment.getTasksFromDB(mContext).get(position));
+        taskViewHolder.bind(findAllTasks().get(position));
+    }
+
+    private List<Task> findAllTasks() {
+        return TaskRepository.getInstance(TaskRepository.Type.JPA, mContext).getAll();
     }
 
     @Override
     public int getItemCount() {
-        return TaskViewFragment.getTasksFromDB(mContext).size();
+        return findAllTasks().size();
     }
 
     /*Класс TaskViewHolder держит на готове ссылки на элементы виджетов CardView, которые он может наполнить данными из объекта Task в методе bind.

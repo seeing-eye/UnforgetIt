@@ -18,7 +18,7 @@ public class TaskUtil {
     private static final Task TASK_4 = Task.buildTask((long) 4, "Feed fishes!", getDateOnFebruary2017(21, 16, 0), Task.PRIORITY_LOW, false);
     private static final Task TASK_5 = Task.buildTask((long) 5, "Feed somebody.", getDateOnFebruary2017(17, 9, 0), Task.PRIORITY_NORMAL, false);
 
-    public static List<Task> getTestTaskArray() {
+    public static List<Task> getTestTaskList() {
         mTestList.add(TASK_1);
         mTestList.add(TASK_2);
         mTestList.add(TASK_3);
