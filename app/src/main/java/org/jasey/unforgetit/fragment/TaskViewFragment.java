@@ -10,16 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.jasey.unforgetit.R;
+import org.jasey.unforgetit.entity.TaskType;
 
 public abstract class TaskViewFragment extends Fragment {
-    RecyclerView mRecyclerView;
-    RecyclerView.Adapter mAdapter;
-    RecyclerView.LayoutManager mLayoutManager;
+    protected RecyclerView mRecyclerView;
+    protected RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
-    public static Fragment getInstance(TaskViewType type) {
+    public static Fragment getInstance(TaskType type) {
         switch (type) {
-            case ACTIVE_TASK_VIEW: return new ActiveTaskViewFragment();
-            case TIME_IS_OUT_VIEW: return new TimeIsOutTaskViewFragment();
+            case ACTIVE_TASK: return new ActiveTaskViewFragment();
+            case TIME_IS_OUT_TASK: return new TimeIsOutTaskViewFragment();
             default:return null;
         }
     }
@@ -39,10 +40,7 @@ public abstract class TaskViewFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
     }
 
-    public enum TaskViewType {
-        ACTIVE_TASK_VIEW,
-        TIME_IS_OUT_VIEW
-    }
+
 }
 
 

@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import org.jasey.unforgetit.R;
+import org.jasey.unforgetit.entity.TaskType;
 import org.jasey.unforgetit.fragment.TaskViewFragment;
 
 public class TaskPagerAdapter extends FragmentPagerAdapter {
@@ -22,9 +23,9 @@ public class TaskPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return TaskViewFragment.getInstance(TaskViewFragment.TaskViewType.ACTIVE_TASK_VIEW);
+                return TaskViewFragment.getInstance(TaskType.ACTIVE_TASK);
             case 1:
-                return TaskViewFragment.getInstance(TaskViewFragment.TaskViewType.TIME_IS_OUT_VIEW);
+                return TaskViewFragment.getInstance(TaskType.TIME_IS_OUT_TASK);
             default:
                 return null;
         }

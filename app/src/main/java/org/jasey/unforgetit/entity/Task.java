@@ -20,7 +20,19 @@ public class Task {
     public static final String TASK_DATE_COLUMN = "date";
     public static final String TASK_PRIORITY_COLUMN = "priority_level";
     public static final String TASK_DONE_COLUMN = "done";
-
+    public static final Comparator<Task> TASK_COMPARATOR = new Comparator<Task>() {
+        @Override
+        public int compare(Task t1, Task t2) {
+            int result = t1.getDate().compareTo(t2.getDate());
+            if (result == 0) {
+                result = t1.getPriorityLevel() - t2.getPriorityLevel();
+            }
+            if (result == 0) {
+                result = t1.getTitle().compareTo(t2.getTitle());
+            }
+            return result;
+        }
+    };
 
     public static final int PRIORITY_LOW = 0;
     public static final int PRIORITY_NORMAL = 1;
@@ -30,21 +42,7 @@ public class Task {
         return new Task(id, title, date, priorityLevel, done);
     }
 
-    public static Comparator<Task> getComparator() {
-        return new Comparator<Task>() {
-            @Override
-            public int compare(Task t1, Task t2) {
-                int result = t1.getDate().compareTo(t2.getDate());
-                if (result == 0) {
-                    result = t1.getPriorityLevel() - t2.getPriorityLevel();
-                }
-                if (result == 0) {
-                    result = t1.getTitle().compareTo(t2.getTitle());
-                }
-                return result;
-            }
-        };
-    }
+
 
     @Id
     @GeneratedValue
@@ -134,6 +132,4 @@ public class Task {
         result = 31 * result + (done ? 1 : 0);
         return result;
     }
-
-
 }

@@ -14,12 +14,12 @@ import java.util.List;
 
 class TimeIsOutTaskViewAdapter extends TaskViewAdapter {
 
-    TimeIsOutTaskViewAdapter(Context context) {
+    protected TimeIsOutTaskViewAdapter(Context context) {
         super(context);
     }
 
     @Override
-    List<Task> findTasks() {
+    protected List<Task> findTasks() {
             return FluentIterable.from(TaskRepository.getInstance(TaskRepository.Type.JPA, context).getAll())
                     .filter(new Predicate<Task>() {
                         @Override
@@ -27,11 +27,11 @@ class TimeIsOutTaskViewAdapter extends TaskViewAdapter {
                             return input.getDate().compareTo(new Date()) <= 0;
                         }
                     })
-                    .toSortedList(Task.getComparator());
+                    .toSortedList(Task.TASK_COMPARATOR);
     }
 
     @Override
-    void bindHolderAndTask(TaskViewHolder taskViewHolder, Task task) {
+    protected void bindHolderAndTask(TaskViewHolder taskViewHolder, Task task) {
         super.bindHolderAndTask(taskViewHolder, task);
 
         if (task.isDone()) {

@@ -14,12 +14,12 @@ import java.util.List;
 
 class ActiveTaskViewAdapter extends TaskViewAdapter {
 
-    ActiveTaskViewAdapter(Context context) {
+    protected ActiveTaskViewAdapter(Context context) {
         super(context);
     }
 
     @Override
-    List<Task> findTasks() {
+    protected List<Task> findTasks() {
             return FluentIterable.from(TaskRepository.getInstance(TaskRepository.Type.JPA, context).getAll())
                     .filter(new Predicate<Task>() {
                         @Override
@@ -27,11 +27,11 @@ class ActiveTaskViewAdapter extends TaskViewAdapter {
                             return input.getDate().after(new Date());
                         }
                     })
-                    .toSortedList(Task.getComparator());
+                    .toSortedList(Task.TASK_COMPARATOR);
     }
 
     @Override
-    void bindHolderAndTask(TaskViewAdapter.TaskViewHolder taskViewHolder, Task task) {
+    protected void bindHolderAndTask(TaskViewAdapter.TaskViewHolder taskViewHolder, Task task) {
         super.bindHolderAndTask(taskViewHolder, task);
 
         switch (taskViewHolder.task.getPriorityLevel()) {
