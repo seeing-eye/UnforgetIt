@@ -3,6 +3,7 @@ package org.jasey.unforgetit.entity;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 
+import java.util.Comparator;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -27,6 +28,22 @@ public class Task {
 
     public static Task buildTask(Long id, String title, Date date, int priorityLevel, boolean done) {
         return new Task(id, title, date, priorityLevel, done);
+    }
+
+    public static Comparator<Task> getComparator() {
+        return new Comparator<Task>() {
+            @Override
+            public int compare(Task t1, Task t2) {
+                int result = t1.getDate().compareTo(t2.getDate());
+                if (result == 0) {
+                    result = t1.getPriorityLevel() - t2.getPriorityLevel();
+                }
+                if (result == 0) {
+                    result = t1.getTitle().compareTo(t2.getTitle());
+                }
+                return result;
+            }
+        };
     }
 
     @Id
@@ -117,4 +134,6 @@ public class Task {
         result = 31 * result + (done ? 1 : 0);
         return result;
     }
+
+
 }

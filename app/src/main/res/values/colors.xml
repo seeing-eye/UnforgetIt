@@ -9,6 +9,7 @@
     <color name="colorGreen">#43A047</color>
     <color name="colorRed">#F44336</color>
     <color name="colorWhite">#FAFAFA</color>
-
-
+    <color name="colorBlack">#000000</color>
+    <color name="colorBackground">#E0F2F1</color>
+    <color name="colorCardBackground">#80CBC4</color>
 </resources>

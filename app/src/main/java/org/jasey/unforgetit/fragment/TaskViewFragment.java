@@ -1,8 +1,8 @@
 package org.jasey.unforgetit.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,12 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.jasey.unforgetit.R;
-import org.jasey.unforgetit.adapter.TaskViewAdapter;
 
-public class TaskViewFragment extends Fragment {
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+public abstract class TaskViewFragment extends Fragment {
+    RecyclerView mRecyclerView;
+    RecyclerView.Adapter mAdapter;
+    RecyclerView.LayoutManager mLayoutManager;
+
+    public static Fragment getInstance(TaskViewType type) {
+        switch (type) {
+            case ACTIVE_TASK_VIEW: return new ActiveTaskViewFragment();
+            case TIME_IS_OUT_VIEW: return new TimeIsOutTaskViewFragment();
+            default:return null;
+        }
+    }
 
     @Nullable
     @Override
@@ -30,10 +37,12 @@ public class TaskViewFragment extends Fragment {
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-        mAdapter = TaskViewAdapter.getInstance(getActivity());
-        mRecyclerView.setAdapter(mAdapter);
     }
 
-
+    public enum TaskViewType {
+        ACTIVE_TASK_VIEW,
+        TIME_IS_OUT_VIEW
+    }
 }
+
+
