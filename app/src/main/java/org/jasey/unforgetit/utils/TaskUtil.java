@@ -28,7 +28,7 @@ public class TaskUtil {
         return mTestList;
     }
 
-    private static Date getDateOnFebruary2017(int day, int hour, int minute) {
+    public static Date getDateOnFebruary2017(int day, int hour, int minute) {
         Calendar cal = Calendar.getInstance();
         cal.set(2017, Calendar.FEBRUARY, day, hour, minute);
         return cal.getTime();
