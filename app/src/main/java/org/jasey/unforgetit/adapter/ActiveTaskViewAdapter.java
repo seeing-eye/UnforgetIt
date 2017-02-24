@@ -37,12 +37,15 @@ class ActiveTaskViewAdapter extends TaskViewAdapter {
         switch (taskViewHolder.task.getPriorityLevel()) {
             case (Task.PRIORITY_LOW):
                 taskViewHolder.imageView.setImageResource(R.drawable.low_priority);
+                taskViewHolder.imageView.setBorderColorResource(R.color.colorBlue);
                 break;
             case (Task.PRIORITY_NORMAL):
                 taskViewHolder.imageView.setImageResource(R.drawable.normal_priority);
+                taskViewHolder.imageView.setBorderColorResource(R.color.colorYellow);
                 break;
             case (Task.PRIORITY_HIGH):
                 taskViewHolder.imageView.setImageResource(R.drawable.hight_priority);
+                taskViewHolder.imageView.setBorderColorResource(R.color.colorRed);
                 break;
         }
     }
