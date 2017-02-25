@@ -21,6 +21,7 @@ public abstract class TaskViewFragment extends Fragment {
         switch (type) {
             case ACTIVE_TASK: return new ActiveTaskViewFragment();
             case TIME_IS_OUT_TASK: return new TimeIsOutTaskViewFragment();
+            case DONE_TASK: return new DoneTaskViewFragment();
             default:return null;
         }
     }

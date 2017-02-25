@@ -8,7 +8,7 @@ import android.support.v4.view.ViewPager;
 import org.jasey.unforgetit.adapter.TaskPagerAdapter;
 
 public class UnforgetItActivity extends FragmentActivity {
-    private final static int PAGE_COUNT = 2;
+    private final static int PAGE_COUNT = 3;
 
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;

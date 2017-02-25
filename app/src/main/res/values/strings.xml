@@ -2,5 +2,6 @@
     <string name="app_name">UnforgetIt</string>
     <string name="active_tasks_title">ACTIVE</string>
     <string name="time_is_out_title">TIME IS OUT</string>
+    <string name="done_title">DONE</string>
 
 </resources>

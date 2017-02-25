@@ -26,6 +26,8 @@ public abstract class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 return new ActiveTaskViewAdapter(context);
             case TIME_IS_OUT_TASK:
                 return new TimeIsOutTaskViewAdapter(context);
+            case DONE_TASK:
+                return new DoneTaskViewAdapter(context);
             default:
                 return null;
         }

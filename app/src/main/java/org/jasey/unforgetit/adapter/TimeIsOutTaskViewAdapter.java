@@ -24,7 +24,7 @@ class TimeIsOutTaskViewAdapter extends TaskViewAdapter {
                     .filter(new Predicate<Task>() {
                         @Override
                         public boolean apply(Task input) {
-                            return input.getDate().compareTo(new Date()) <= 0;
+                            return input.getDate().compareTo(new Date()) <= 0 && !input.isDone();
                         }
                     })
                     .toSortedList(Task.TASK_COMPARATOR);
@@ -33,14 +33,7 @@ class TimeIsOutTaskViewAdapter extends TaskViewAdapter {
     @Override
     protected void bindHolderAndTask(TaskViewHolder taskViewHolder, Task task) {
         super.bindHolderAndTask(taskViewHolder, task);
-
-        if (task.isDone()) {
-            taskViewHolder.imageView.setImageResource(R.drawable.done);
-            taskViewHolder.imageView.setBorderColorResource(R.color.colorGreen);
-        } else {
             taskViewHolder.imageView.setImageResource(R.drawable.refused);
             taskViewHolder.imageView.setBorderColorResource(R.color.colorRed);
-
-        }
     }
 }

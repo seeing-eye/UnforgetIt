@@ -25,6 +25,8 @@ public class TaskPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return TaskViewFragment.getInstance(TaskType.ACTIVE_TASK);
             case 1:
+                return TaskViewFragment.getInstance(TaskType.DONE_TASK);
+            case 2:
                 return TaskViewFragment.getInstance(TaskType.TIME_IS_OUT_TASK);
             default:
                 return null;
@@ -42,6 +44,8 @@ public class TaskPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return mContext.getString(R.string.active_tasks_title);
             case 1:
+                return mContext.getString(R.string.done_title);
+            case 2:
                 return mContext.getString(R.string.time_is_out_title);
             default:
                 return null;
