@@ -41,7 +41,6 @@ public abstract class TaskViewFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
     }
 
-
 }
 
 

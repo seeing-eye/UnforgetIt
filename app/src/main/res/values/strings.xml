@@ -3,5 +3,9 @@
     <string name="active_tasks_title">ACTIVE</string>
     <string name="time_is_out_title">TIME IS OUT</string>
     <string name="done_title">DONE</string>
+    <string name="task_title">Task title</string>
+    <string name="add_title">Add new task</string>
+    <string name="save_button">Save</string>
+    <string name="priority_hint">Choose priority level</string>
 
 </resources>
