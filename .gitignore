@@ -12,3 +12,4 @@
 .gitignore
 gradlew
 gradlew.bat
+app/libs/
