@@ -8,10 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jasey.unforgetit.R;
 import org.jasey.unforgetit.entity.Task;
 import org.jasey.unforgetit.entity.TaskType;
-import org.jasey.unforgetit.utils.TaskUtil;
 
 import java.util.List;
 
@@ -60,7 +60,7 @@ public abstract class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.
     protected void bindHolderAndTask(TaskViewHolder taskViewHolder, Task task) {
         taskViewHolder.task = task;
         taskViewHolder.titleView.setText(taskViewHolder.task.getTitle());
-        taskViewHolder.dateView.setText(TaskUtil.formatDate(taskViewHolder.task.getDate()));
+        taskViewHolder.dateView.setText(DateFormatUtils.format(taskViewHolder.task.getDate(), Task.TIME_FORMAT + Task.DELIMITER + Task.DATE_FORMAT));
     }
         
     /*Класс TaskViewHolder держит на готове ссылки на элементы виджетов CardView, которые он может наполнить данными из объекта Task в методе bindHolderAndTask.

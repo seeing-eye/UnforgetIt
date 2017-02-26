@@ -2,14 +2,15 @@ package org.jasey.unforgetit.utils;
 
 import org.jasey.unforgetit.entity.Task;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class TaskUtil {
+    public static final String DATE_PATTERN = "dd/MM/yyyy";
+    public static final String DELIMITER = " ";
+    public static final String TIME_PATTERN = "HH:mm";
     private static List<Task> mTestList = new ArrayList<>();
 
     private static final Task TASK_1 = Task.buildTask((long) 1, "Feed the dog!", getDateOnFebruary2017(19, 23, 0), Task.PRIORITY_NORMAL, false);
@@ -34,8 +35,4 @@ public class TaskUtil {
         return cal.getTime();
     }
 
-    public static String formatDate(Date date) {
-        DateFormat myFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
-        return myFormat.format(date);
-    }
 }

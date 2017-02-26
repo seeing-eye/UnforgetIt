@@ -13,5 +13,5 @@
     <color name="colorBackground">#E0F2F1</color>
     <color name="colorCardBackground">#80CBC4</color>
     <color name="colorFAB">#00BFA5</color>
-
+    <color name="colorAlert">#FFCDD2</color>
 </resources>
