@@ -1,37 +1,21 @@
-## Welcome to GitHub Pages
+## UnforgetIt
 
-You can use the [editor on GitHub](https://github.com/seeing-eye/UnforgetIt/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+Простое приложение-напоминалка, которое поможет вам не забывать о важных делах и событиях.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Скриншоты
 
-### Markdown
+<img src="https://habrastorage.org/files/1a4/503/b54/1a4503b549c348a1ba4287ac071f8355.png" width = "200"/>
+<img src="https://habrastorage.org/files/813/ed0/a98/813ed0a98c07423b9390f8857bc9e571.png" width = "200"/>
+<img src="https://habrastorage.org/files/bdb/8db/738/bdb8db7383104290b478e3ece637cb23.png" width = "200"/>
+<img src="https://habrastorage.org/files/fff/d82/f2f/fffd82f2fd264df08f8e63d090e886bd.png" width = "200"/>
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-```markdown
-Syntax highlighted code block
+### Библиотеки
 
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/seeing-eye/UnforgetIt/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+- Android Support Libraries;
+- JPA;
+- OrmLite;
+- Guava;
+- Apache Commons;
+- jUnit.
+ 
