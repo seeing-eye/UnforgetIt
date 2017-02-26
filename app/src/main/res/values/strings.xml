@@ -2,5 +2,23 @@
     <string name="app_name">UnforgetIt</string>
     <string name="active_tasks_title">ACTIVE</string>
     <string name="time_is_out_title">TIME IS OUT</string>
+    <string name="done_title">DONE</string>
+    <string name="task_title_hint">Task title</string>
+    <string name="add_title">Add new task</string>
+    <string name="save_button">Save</string>
+    <string name="priority_hint">Select priority level</string>
+    <string name="low_priority">Low</string>
+    <string name="normal_priority">Normal</string>
+    <string name="high_priority">High</string>
+    <string name="date_hint">Pick date</string>
+    <string name="time_hint">Pick time</string>
+    <string name="exit_message">Discard new task?</string>
+    <string name="erase">erase</string>
+    <string name="cancel">cancel</string>
+    <string name="error_empty_title">type title</string>
+    <string name="title_alert_toast">Please, enter task title!</string>
+    <string name="date_time_alert_toast">Please, pick date and time!</string>
+    <string name="task_created_toast">New task created.</string>
+    <string name="task_already_exist_toast">Task already exist!</string>
 
 </resources>

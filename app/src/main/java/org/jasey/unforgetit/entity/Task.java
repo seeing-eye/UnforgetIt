@@ -14,6 +14,10 @@ import javax.persistence.Id;
 @Entity(name = Task.TABLE_NAME)
 public class Task {
 
+    public static final String DATE_FORMAT = "dd/MM/yyyy";
+    public static final String DELIMITER = " ";
+    public static final String TIME_FORMAT = "HH:mm";
+
     public static final String TABLE_NAME = "tasks";
     public static final String ID = "id";
     public static final String TASK_TITLE_COLUMN = "title";
