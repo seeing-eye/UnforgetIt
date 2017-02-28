@@ -19,7 +19,7 @@ import java.util.Date;
 
 @RunWith(AndroidJUnit4.class)
 
-public class AddOneTaskToDBTest {
+public class AddSomeTasksToDBTest {
     private TaskRepositoryJPAImpl repository;
 
     @Before
@@ -45,19 +45,19 @@ public class AddOneTaskToDBTest {
     public void add_one_task_test() {
 
         Task low_task = getTask();
-        low_task.setDate(TaskUtil.getDateOnFebruary2017(26, 9, 0));
+        low_task.setDate(TaskUtil.getDateOnFebruary2017(28, 9, 0));
         low_task.setPriorityLevel(Task.PRIORITY_LOW);
         low_task.setTitle("Сходить в магазин.");
         repository.addNew(low_task);
 
         Task normal_task = getTask();
-        normal_task.setDate(TaskUtil.getDateOnFebruary2017(26, 9, 0));
+        normal_task.setDate(TaskUtil.getDateOnFebruary2017(28, 9, 0));
         normal_task.setPriorityLevel(Task.PRIORITY_NORMAL);
         normal_task.setTitle("Полить помидорки.");
         repository.addNew(normal_task);
 
         Task hight_task = getTask();
-        hight_task.setDate(TaskUtil.getDateOnFebruary2017(26, 9, 0));
+        hight_task.setDate(TaskUtil.getDateOnFebruary2017(28, 9, 0));
         hight_task.setPriorityLevel(Task.PRIORITY_HIGH);
         hight_task.setTitle("Покормить кота!");
         repository.addNew(hight_task);

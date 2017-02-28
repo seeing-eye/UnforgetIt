@@ -2,23 +2,32 @@ package org.jasey.unforgetit;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import org.jasey.unforgetit.adapter.ActiveTaskViewAdapter;
+import org.jasey.unforgetit.adapter.DoneTaskViewAdapter;
 import org.jasey.unforgetit.adapter.TaskPagerAdapter;
+import org.jasey.unforgetit.adapter.TaskViewAdapter;
 import org.jasey.unforgetit.entity.Task;
 import org.jasey.unforgetit.fragment.AddTaskDialogFragment;
 import org.jasey.unforgetit.repository.TaskRepository;
 
-public class UnforgetItActivity extends AppCompatActivity implements AddTaskDialogFragment.AddTaskDialogListener {
+public class UnforgetItActivity extends AppCompatActivity
+        implements
+        AddTaskDialogFragment.AddTaskDialogListener,
+        ActiveTaskViewAdapter.ActiveTaskAnimationListener,
+        DoneTaskViewAdapter.DoneTaskAnimationListener,
+        TaskViewAdapter.DeleteActionClickListener {
+
     private final static int PAGE_COUNT = 3;
 
     private ViewPager mPager;
-    private PagerAdapter mPagerAdapter;
+    private FragmentStatePagerAdapter mPagerAdapter;
     private FloatingActionButton mAddFAB;
     private AddTaskDialogFragment mAddDialog;
 
@@ -57,18 +66,20 @@ public class UnforgetItActivity extends AppCompatActivity implements AddTaskDial
                         .replace(R.id.unforget_it_activity, mAddDialog)
                         .addToBackStack(null)
                         .commit();
+                mPagerAdapter.notifyDataSetChanged();
             }
         });
+
     }
 
-        @Override
-        public void onBackPressed() {
-            if (mPager.getCurrentItem() == 0) {
-                super.onBackPressed();
-            } else {
-                mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-            }
+    @Override
+    public void onBackPressed() {
+        if (mPager.getCurrentItem() == 0) {
+            super.onBackPressed();
+        } else {
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
         }
+    }
 
     @Override
     public void onSaveClick(Task newTask) {
@@ -78,5 +89,26 @@ public class UnforgetItActivity extends AppCompatActivity implements AddTaskDial
         } else {
             Toast.makeText(this, R.string.task_already_exist_toast, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onActiveTaskImageClick(Task task) {
+        task.setDone(true);
+        TaskRepository.getInstance(TaskRepository.Type.JPA, this).update(task);
+        mPagerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDoneTaskImageClick(Task task) {
+        task.setDone(false);
+        TaskRepository.getInstance(TaskRepository.Type.JPA, this).update(task);
+        mPagerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDeleteActionClick(Task task) {
+        TaskRepository.getInstance(TaskRepository.Type.JPA, this).remove(task);
+        mPagerAdapter.notifyDataSetChanged();
+        Toast.makeText(this, R.string.task_deleted_toast, Toast.LENGTH_SHORT).show();
     }
 }

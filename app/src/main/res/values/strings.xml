@@ -14,11 +14,13 @@
     <string name="time_hint">Pick time</string>
     <string name="exit_message">Discard new task?</string>
     <string name="erase">erase</string>
-    <string name="cancel">cancel</string>
     <string name="error_empty_title">type title</string>
     <string name="title_alert_toast">Please, enter task title!</string>
     <string name="date_time_alert_toast">Please, pick date and time!</string>
     <string name="task_created_toast">New task created.</string>
     <string name="task_already_exist_toast">Task already exist!</string>
+    <string name="task_deleted_toast">Task deleted.</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
 </resources>
