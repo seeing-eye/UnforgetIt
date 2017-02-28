@@ -18,8 +18,6 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public abstract class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    protected Context context;
-
     public static TaskViewAdapter getInstance(Context context, TaskType type) {
         switch (type) {
             case ACTIVE_TASK:
@@ -33,20 +31,33 @@ public abstract class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
+    private int mPosition;
+    protected Context context;
+
     protected TaskViewAdapter(Context context) {
         this.context = context;
+    }
+
+    public int getPosition() {
+        return mPosition;
+    }
+
+    public void setPosition(int mPosition) {
+        this.mPosition = mPosition;
     }
 
     @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                                 .inflate(R.layout.task_item, parent, false);
+
         return new TaskViewHolder(v);
     }
     
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         TaskViewHolder taskViewHolder = (TaskViewHolder) holder;
+        taskViewHolder.cv.setLongClickable(true);
         bindHolderAndTask(taskViewHolder, findTasks().get(position));
     }
 
@@ -57,14 +68,14 @@ public abstract class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     protected abstract List<Task> findTasks();
 
-    protected void bindHolderAndTask(TaskViewHolder taskViewHolder, Task task) {
+    protected void bindHolderAndTask(final TaskViewHolder taskViewHolder, final Task task) {
         taskViewHolder.task = task;
         taskViewHolder.titleView.setText(taskViewHolder.task.getTitle());
         taskViewHolder.dateView.setText(DateFormatUtils.format(taskViewHolder.task.getDate(), Task.TIME_FORMAT + Task.DELIMITER + Task.DATE_FORMAT));
     }
-        
+
     /*Класс TaskViewHolder держит на готове ссылки на элементы виджетов CardView, которые он может наполнить данными из объекта Task в методе bindHolderAndTask.
-    Этот класс используется только адаптером. Адаптер поручает ему работу по заполнению виджетов*/
+        Этот класс используется только адаптером. Адаптер поручает ему работу по заполнению виджетов*/
     protected class TaskViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         CircleImageView imageView;

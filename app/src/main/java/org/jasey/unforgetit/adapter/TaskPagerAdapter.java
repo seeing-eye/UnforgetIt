@@ -3,13 +3,13 @@ package org.jasey.unforgetit.adapter;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import org.jasey.unforgetit.R;
 import org.jasey.unforgetit.entity.TaskType;
 import org.jasey.unforgetit.fragment.TaskViewFragment;
 
-public class TaskPagerAdapter extends FragmentPagerAdapter {
+public class TaskPagerAdapter extends FragmentStatePagerAdapter {
     private Context mContext;
     private int pagesCount;
 
@@ -40,7 +40,7 @@ public class TaskPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getItemPosition(Object object) {
-        return POSITION_NONE;
+      return POSITION_NONE;
     }
 
     @Override
