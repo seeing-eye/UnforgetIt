@@ -13,6 +13,7 @@ import org.jasey.unforgetit.R;
 import org.jasey.unforgetit.entity.Task;
 import org.jasey.unforgetit.repository.TaskRepository;
 
+import java.util.Date;
 import java.util.List;
 
 public class DoneTaskViewAdapter extends TaskViewAdapter {
@@ -80,28 +81,33 @@ public class DoneTaskViewAdapter extends TaskViewAdapter {
                     public void onAnimationRepeat(Animator animation) {
                     }
                 });
+                ObjectAnimator translateAnimator;
+                if (task.getDate().before(new Date())) {
+                    translateAnimator = ObjectAnimator.ofFloat(taskViewHolder.itemView, "translationX", 0f, taskViewHolder.itemView.getWidth());
+                } else {
+                    translateAnimator = ObjectAnimator.ofFloat(taskViewHolder.itemView, "translationX", 0f, -taskViewHolder.itemView.getWidth());
+                }
+                    translateAnimator.setDuration(500);
+                    translateAnimator.addListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                        }
 
-                ObjectAnimator translateAnimator = ObjectAnimator.ofFloat(taskViewHolder.itemView, "translationX", 0f, -taskViewHolder.itemView.getWidth());
-                translateAnimator.setDuration(500);
-                translateAnimator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                    }
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mDoneTaskAnimationListener = (DoneTaskViewAdapter.DoneTaskAnimationListener) context;
+                            mDoneTaskAnimationListener.onDoneTaskImageClick(task);
+                        }
 
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mDoneTaskAnimationListener = (DoneTaskViewAdapter.DoneTaskAnimationListener) context;
-                        mDoneTaskAnimationListener.onDoneTaskImageClick(task);
-                    }
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+                        }
 
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                    }
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+                        }
+                    });
 
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-                    }
-                });
 
                 AnimatorSet animatorSet = new AnimatorSet();
                 animatorSet.playSequentially(rotateAnimator, translateAnimator);
