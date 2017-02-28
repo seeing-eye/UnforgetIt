@@ -56,7 +56,7 @@ public class DoneTaskViewAdapter extends TaskViewAdapter {
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        switch (taskViewHolder.task.getPriorityLevel()) {
+                        switch (task.getPriorityLevel()) {
                             case (Task.PRIORITY_LOW):
                                 taskViewHolder.imageView.setImageResource(R.drawable.low_priority);
                                 taskViewHolder.imageView.setBorderColorResource(R.color.colorBlue);
