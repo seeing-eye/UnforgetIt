@@ -10,13 +10,18 @@ import android.view.View;
 import android.widget.Toast;
 
 import org.jasey.unforgetit.adapter.ActiveTaskViewAdapter;
+import org.jasey.unforgetit.adapter.DoneTaskViewAdapter;
 import org.jasey.unforgetit.adapter.TaskPagerAdapter;
 import org.jasey.unforgetit.entity.Task;
 import org.jasey.unforgetit.fragment.AddTaskDialogFragment;
 import org.jasey.unforgetit.repository.TaskRepository;
 
 public class UnforgetItActivity extends AppCompatActivity
-        implements AddTaskDialogFragment.AddTaskDialogListener, ActiveTaskViewAdapter.AnimationViewListener {
+        implements
+        AddTaskDialogFragment.AddTaskDialogListener,
+        ActiveTaskViewAdapter.ActiveTaskAnimationListener,
+        DoneTaskViewAdapter.DoneTaskAnimationListener {
+
     private final static int PAGE_COUNT = 3;
 
     private ViewPager mPager;
@@ -85,8 +90,15 @@ public class UnforgetItActivity extends AppCompatActivity
     }
 
     @Override
-    public void onAnimationViewClick(Task task) {
+    public void onActiveTaskImageClick(Task task) {
         task.setDone(true);
+        TaskRepository.getInstance(TaskRepository.Type.JPA, this).update(task);
+        mPagerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDoneTaskImageClick(Task task) {
+        task.setDone(false);
         TaskRepository.getInstance(TaskRepository.Type.JPA, this).update(task);
         mPagerAdapter.notifyDataSetChanged();
     }

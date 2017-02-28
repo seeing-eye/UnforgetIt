@@ -17,14 +17,14 @@ import java.util.Date;
 import java.util.List;
 
 public class ActiveTaskViewAdapter extends TaskViewAdapter {
-    private AnimationViewListener mAnimationViewListener;
+    private ActiveTaskAnimationListener mActiveTaskAnimationListener;
 
     protected ActiveTaskViewAdapter(Context context) {
         super(context);
     }
 
-    public interface AnimationViewListener {
-        void onAnimationViewClick(Task task);
+    public interface ActiveTaskAnimationListener {
+        void onActiveTaskImageClick(Task task);
     }
 
     @Override
@@ -84,33 +84,25 @@ public class ActiveTaskViewAdapter extends TaskViewAdapter {
                     }
                 });
 
-                ObjectAnimator translateAnimator = ObjectAnimator.ofFloat(
-                        taskViewHolder.itemView,
-                        "translationX",
-                        0f,
-                        taskViewHolder.itemView.getWidth());
-
+                ObjectAnimator translateAnimator = ObjectAnimator.ofFloat(taskViewHolder.itemView, "translationX", 0f, taskViewHolder.itemView.getWidth());
                 translateAnimator.setDuration(500);
                 translateAnimator.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
-
                     }
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        mAnimationViewListener = (AnimationViewListener) context;
-                        mAnimationViewListener.onAnimationViewClick(task);
+                        mActiveTaskAnimationListener = (ActiveTaskAnimationListener) context;
+                        mActiveTaskAnimationListener.onActiveTaskImageClick(task);
                     }
 
                     @Override
                     public void onAnimationCancel(Animator animation) {
-
                     }
 
                     @Override
                     public void onAnimationRepeat(Animator animation) {
-
                     }
                 });
 
