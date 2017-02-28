@@ -13,7 +13,8 @@
         android:foregroundGravity="center"
         card_view:cardCornerRadius="20dp"
         card_view:cardElevation="@dimen/cardview_default_elevation"
-        card_view:cardBackgroundColor="@color/colorCardBackground">
+        card_view:cardBackgroundColor="@color/colorCardBackground"
+        android:clickable="true">
 
         <RelativeLayout
             android:layout_width="match_parent"

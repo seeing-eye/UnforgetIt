@@ -36,11 +36,9 @@ public abstract class TaskViewFragment extends Fragment {
     public void onStart() {
         super.onStart();
         mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
-
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
     }
-
 }
 
 

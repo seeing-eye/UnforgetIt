@@ -3,7 +3,9 @@ package org.jasey.unforgetit.adapter;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -18,6 +20,15 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public abstract class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final int ID_EDIT = 101;
+    private static final int ID_DELETE = 102;
+
+    private DeleteActionClickListener mDeleteActionClickListener;
+
+    public interface DeleteActionClickListener {
+        void onDeleteActionClick(Task task);
+    }
+
     public static TaskViewAdapter getInstance(Context context, TaskType type) {
         switch (type) {
             case ACTIVE_TASK:
@@ -31,19 +42,10 @@ public abstract class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
-    private int mPosition;
     protected Context context;
 
     protected TaskViewAdapter(Context context) {
         this.context = context;
-    }
-
-    public int getPosition() {
-        return mPosition;
-    }
-
-    public void setPosition(int mPosition) {
-        this.mPosition = mPosition;
     }
 
     @Override
@@ -76,7 +78,10 @@ public abstract class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     /*Класс TaskViewHolder держит на готове ссылки на элементы виджетов CardView, которые он может наполнить данными из объекта Task в методе bindHolderAndTask.
         Этот класс используется только адаптером. Адаптер поручает ему работу по заполнению виджетов*/
-    protected class TaskViewHolder extends RecyclerView.ViewHolder {
+    protected class TaskViewHolder extends RecyclerView.ViewHolder
+            implements
+            View.OnCreateContextMenuListener,
+            MenuItem.OnMenuItemClickListener {
         CardView cv;
         CircleImageView imageView;
         TextView titleView;
@@ -85,10 +90,39 @@ public abstract class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         TaskViewHolder(View v) {
             super(v);
+            v.setOnCreateContextMenuListener(this);
             cv = (CardView) v.findViewById(R.id.card_view);
             imageView = (CircleImageView) v.findViewById(R.id.image_circle);
             titleView = (TextView) v.findViewById(R.id.title);
             dateView = (TextView) v.findViewById(R.id.date);
+
+
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            task = findTasks().get(getLayoutPosition());
+
+            switch (item.getItemId()) {
+                case ID_DELETE:
+                    mDeleteActionClickListener = (DeleteActionClickListener) context;
+                    mDeleteActionClickListener.onDeleteActionClick(task);
+                    return true;
+                case ID_EDIT:
+                    //TODO edit action
+                    return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.setHeaderTitle("Select the action for \"" + task.getTitle() + "\" task");
+            MenuItem editMenuItem = menu.add(0, ID_EDIT, 0, R.string.edit);
+            MenuItem deleteMenuItem = menu.add(0, ID_DELETE, 0, R.string.delete);
+
+            editMenuItem.setOnMenuItemClickListener(this);
+            deleteMenuItem.setOnMenuItemClickListener(this);
         }
     }
 }

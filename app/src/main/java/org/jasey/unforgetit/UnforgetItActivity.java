@@ -12,6 +12,7 @@ import android.widget.Toast;
 import org.jasey.unforgetit.adapter.ActiveTaskViewAdapter;
 import org.jasey.unforgetit.adapter.DoneTaskViewAdapter;
 import org.jasey.unforgetit.adapter.TaskPagerAdapter;
+import org.jasey.unforgetit.adapter.TaskViewAdapter;
 import org.jasey.unforgetit.entity.Task;
 import org.jasey.unforgetit.fragment.AddTaskDialogFragment;
 import org.jasey.unforgetit.repository.TaskRepository;
@@ -20,7 +21,8 @@ public class UnforgetItActivity extends AppCompatActivity
         implements
         AddTaskDialogFragment.AddTaskDialogListener,
         ActiveTaskViewAdapter.ActiveTaskAnimationListener,
-        DoneTaskViewAdapter.DoneTaskAnimationListener {
+        DoneTaskViewAdapter.DoneTaskAnimationListener,
+        TaskViewAdapter.DeleteActionClickListener {
 
     private final static int PAGE_COUNT = 3;
 
@@ -101,5 +103,12 @@ public class UnforgetItActivity extends AppCompatActivity
         task.setDone(false);
         TaskRepository.getInstance(TaskRepository.Type.JPA, this).update(task);
         mPagerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDeleteActionClick(Task task) {
+        TaskRepository.getInstance(TaskRepository.Type.JPA, this).remove(task);
+        mPagerAdapter.notifyDataSetChanged();
+        Toast.makeText(this, R.string.task_deleted_toast, Toast.LENGTH_SHORT).show();
     }
 }
