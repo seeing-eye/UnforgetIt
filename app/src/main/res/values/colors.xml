@@ -14,4 +14,10 @@
     <color name="colorCardBackground">#80CBC4</color>
     <color name="colorFAB">#00BFA5</color>
     <color name="colorAlert">#FFCDD2</color>
+    <color name="colorBlack12">#1F000000</color>
+    <color name="textColorBlack87">#DE000000</color>
+    <color name="textColorBlack38">#61000000</color>
+
+
+
 </resources>

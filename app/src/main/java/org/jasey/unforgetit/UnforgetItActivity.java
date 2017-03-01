@@ -1,6 +1,7 @@
 package org.jasey.unforgetit;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -63,6 +64,7 @@ public class UnforgetItActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 mAddFAB.setVisibility(View.INVISIBLE);
+
                 mAddDialog = new AddTaskDialogFragment();
                 getSupportFragmentManager().beginTransaction()
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -124,6 +126,6 @@ public class UnforgetItActivity extends AppCompatActivity
                 .replace(R.id.unforget_it_activity, mEditDialog)
                 .addToBackStack(null)
                 .commit();
-
+        mAddFAB.setVisibility(View.INVISIBLE);
     }
 }

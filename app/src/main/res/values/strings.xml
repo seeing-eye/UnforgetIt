@@ -23,5 +23,6 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="edit_title">Edit task</string>
+    <string name="context_menu_title">Select the action</string>
 
 </resources>

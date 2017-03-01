@@ -112,7 +112,7 @@ public abstract class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            menu.setHeaderTitle("Select the action for \"" + findTasks().get(getLayoutPosition()).getTitle() + "\" task");
+            menu.setHeaderTitle(R.string.context_menu_title);
             MenuItem editMenuItem = menu.add(0, ID_EDIT, 0, R.string.edit);
             MenuItem deleteMenuItem = menu.add(0, ID_DELETE, 0, R.string.delete);
 

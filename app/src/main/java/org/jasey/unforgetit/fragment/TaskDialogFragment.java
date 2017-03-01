@@ -20,6 +20,7 @@ import android.view.Window;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -35,7 +36,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public abstract class TaskDialogFragment extends DialogFragment implements View.OnClickListener {
-    protected EditText mTitle, mDatePicker, mTimePicker;
+    protected EditText mTitle;
+    TextView mDatePicker, mTimePicker;
     protected View rootView;
     private SaveTaskDialogListener mListener;
     protected Task task;
@@ -51,8 +53,8 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
 
         mTitle = (EditText) rootView.findViewById(R.id.task_title);
 
-        mDatePicker = (EditText) rootView.findViewById(R.id.date_picker);
-        mTimePicker = (EditText) rootView.findViewById(R.id.time_picker);
+        mDatePicker = (TextView) rootView.findViewById(R.id.date_picker);
+        mTimePicker = (TextView) rootView.findViewById(R.id.time_picker);
 
         mDatePicker.setOnClickListener(this);
         mTimePicker.setOnClickListener(this);
