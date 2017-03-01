@@ -23,10 +23,11 @@ public abstract class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.
     private static final int ID_EDIT = 101;
     private static final int ID_DELETE = 102;
 
-    private DeleteActionClickListener mDeleteActionClickListener;
+    private ContextMenuItemClickListener mContextMenuItemClickListener;
 
-    public interface DeleteActionClickListener {
+    public interface ContextMenuItemClickListener {
         void onDeleteActionClick(Task task);
+        void onEditItemClick(Task task);
     }
 
     public static TaskViewAdapter getInstance(Context context, TaskType type) {
@@ -93,19 +94,17 @@ public abstract class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.
             imageView = (CircleImageView) v.findViewById(R.id.image_circle);
             titleView = (TextView) v.findViewById(R.id.title);
             dateView = (TextView) v.findViewById(R.id.date);
-
-
         }
 
         @Override
         public boolean onMenuItemClick(MenuItem item) {
+            mContextMenuItemClickListener = (ContextMenuItemClickListener) context;
             switch (item.getItemId()) {
                 case ID_DELETE:
-                    mDeleteActionClickListener = (DeleteActionClickListener) context;
-                    mDeleteActionClickListener.onDeleteActionClick(findTasks().get(getLayoutPosition()));
+                    mContextMenuItemClickListener.onDeleteActionClick(findTasks().get(getLayoutPosition()));
                     return true;
                 case ID_EDIT:
-                    //TODO edit action
+                    mContextMenuItemClickListener.onEditItemClick(findTasks().get(getLayoutPosition()));
                     return true;
             }
             return false;
@@ -113,7 +112,7 @@ public abstract class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            menu.setHeaderTitle("Select the action for \"" + findTasks().get(getLayoutPosition()).getTitle() + "\" task");
+            menu.setHeaderTitle(R.string.context_menu_title);
             MenuItem editMenuItem = menu.add(0, ID_EDIT, 0, R.string.edit);
             MenuItem deleteMenuItem = menu.add(0, ID_DELETE, 0, R.string.delete);
 

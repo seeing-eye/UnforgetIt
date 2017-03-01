@@ -1,6 +1,7 @@
 package org.jasey.unforgetit.repository;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.jasey.unforgetit.entity.Task;
@@ -23,10 +24,7 @@ class TaskRepositoryJPAImpl extends TaskRepository {
     public boolean addNew(Task task) {
         long stopwatch = System.currentTimeMillis();
         try {
-            if (task.getId() != null) {
-                return false;
-            }
-            return task.equals(helper.getTaskDAO().createIfNotExists(task));
+            return  task.getId() == null && task.equals(helper.getTaskDAO().createIfNotExists(task));
         } catch (Exception e) {
             Log.e(this.getClass().getName(), ADD + ERROR_MESSAGE, e);
             return false;
@@ -61,7 +59,7 @@ class TaskRepositoryJPAImpl extends TaskRepository {
         }
     }
 
-
+    @NonNull
     @Override
     public List<Task> getAll() {
         long stopwatch = System.currentTimeMillis();

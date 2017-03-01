@@ -1,6 +1,7 @@
 package org.jasey.unforgetit;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -15,14 +16,16 @@ import org.jasey.unforgetit.adapter.TaskPagerAdapter;
 import org.jasey.unforgetit.adapter.TaskViewAdapter;
 import org.jasey.unforgetit.entity.Task;
 import org.jasey.unforgetit.fragment.AddTaskDialogFragment;
+import org.jasey.unforgetit.fragment.EditTaskDialogFragment;
+import org.jasey.unforgetit.fragment.TaskDialogFragment;
 import org.jasey.unforgetit.repository.TaskRepository;
 
 public class UnforgetItActivity extends AppCompatActivity
         implements
-        AddTaskDialogFragment.AddTaskDialogListener,
+        TaskDialogFragment.SaveTaskDialogListener,
         ActiveTaskViewAdapter.ActiveTaskAnimationListener,
         DoneTaskViewAdapter.DoneTaskAnimationListener,
-        TaskViewAdapter.DeleteActionClickListener {
+        TaskViewAdapter.ContextMenuItemClickListener {
 
     private final static int PAGE_COUNT = 3;
 
@@ -30,6 +33,7 @@ public class UnforgetItActivity extends AppCompatActivity
     private FragmentStatePagerAdapter mPagerAdapter;
     private FloatingActionButton mAddFAB;
     private AddTaskDialogFragment mAddDialog;
+    private EditTaskDialogFragment mEditDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,7 @@ public class UnforgetItActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 mAddFAB.setVisibility(View.INVISIBLE);
+
                 mAddDialog = new AddTaskDialogFragment();
                 getSupportFragmentManager().beginTransaction()
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -82,13 +87,14 @@ public class UnforgetItActivity extends AppCompatActivity
     }
 
     @Override
-    public void onSaveClick(Task newTask) {
-        if (TaskRepository.getInstance(TaskRepository.Type.JPA, this).addNew(newTask)) {
-            mPagerAdapter.notifyDataSetChanged();
+    public void onSaveClick(Task task) {
+        if (TaskRepository.getInstance(TaskRepository.Type.JPA, this).addNew(task)) {
             Toast.makeText(this, R.string.task_created_toast, Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, R.string.task_already_exist_toast, Toast.LENGTH_SHORT).show();
+            TaskRepository.getInstance(TaskRepository.Type.JPA, this).update(task);
+            Toast.makeText(this, R.string.task_updated_toast, Toast.LENGTH_SHORT).show();
         }
+        mPagerAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -110,5 +116,16 @@ public class UnforgetItActivity extends AppCompatActivity
         TaskRepository.getInstance(TaskRepository.Type.JPA, this).remove(task);
         mPagerAdapter.notifyDataSetChanged();
         Toast.makeText(this, R.string.task_deleted_toast, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onEditItemClick(Task task) {
+        mEditDialog = EditTaskDialogFragment.getInstance(task);
+        getSupportFragmentManager().beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .replace(R.id.unforget_it_activity, mEditDialog)
+                .addToBackStack(null)
+                .commit();
+        mAddFAB.setVisibility(View.INVISIBLE);
     }
 }

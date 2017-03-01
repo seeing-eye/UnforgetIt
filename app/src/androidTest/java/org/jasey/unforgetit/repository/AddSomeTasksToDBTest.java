@@ -45,40 +45,40 @@ public class AddSomeTasksToDBTest {
     public void add_one_task_test() {
 
         Task low_task = getTask();
-        low_task.setDate(TaskUtil.getDateOnFebruary2017(28, 9, 0));
+        low_task.setDate(TaskUtil.getDateOnMarch2017(28, 22, 0));
         low_task.setPriorityLevel(Task.PRIORITY_LOW);
         low_task.setTitle("Сходить в магазин.");
         repository.addNew(low_task);
 
         Task normal_task = getTask();
-        normal_task.setDate(TaskUtil.getDateOnFebruary2017(28, 9, 0));
+        normal_task.setDate(TaskUtil.getDateOnMarch2017(28, 22, 0));
         normal_task.setPriorityLevel(Task.PRIORITY_NORMAL);
         normal_task.setTitle("Полить помидорки.");
         repository.addNew(normal_task);
 
         Task hight_task = getTask();
-        hight_task.setDate(TaskUtil.getDateOnFebruary2017(28, 9, 0));
+        hight_task.setDate(TaskUtil.getDateOnMarch2017(28, 22, 0));
         hight_task.setPriorityLevel(Task.PRIORITY_HIGH);
         hight_task.setTitle("Покормить кота!");
         repository.addNew(hight_task);
 
         Task refused_task = getTask();
-        refused_task.setDate(TaskUtil.getDateOnFebruary2017(15, 9, 0));
+        refused_task.setDate(TaskUtil.getDateOnMarch2017(28, 22, 0));
         refused_task.setTitle("Позвонить тёще.");
         repository.addNew(refused_task);
-        refused_task.setDate(TaskUtil.getDateOnFebruary2017(16, 9, 0));
+        refused_task.setDate(TaskUtil.getDateOnMarch2017(16, 9, 0));
         refused_task.setTitle("Позвонить тёще.");
         repository.addNew(refused_task);
-        refused_task.setDate(TaskUtil.getDateOnFebruary2017(17, 9, 0));
+        refused_task.setDate(TaskUtil.getDateOnMarch2017(17, 9, 0));
         refused_task.setTitle("Позвонить тёще.");
         repository.addNew(refused_task);
 
         Task done_task = getTask();
-        done_task.setDate(TaskUtil.getDateOnFebruary2017(23, 9, 0));
+        done_task.setDate(TaskUtil.getDateOnMarch2017(28, 22, 0));
         done_task.setTitle("Посадить дерево.");
         done_task.setDone(true);
         repository.addNew(done_task);
-        done_task.setDate(TaskUtil.getDateOnFebruary2017(23, 9, 0));
+        done_task.setDate(TaskUtil.getDateOnMarch2017(28, 22, 0));
         done_task.setTitle("Построить дом.");
         done_task.setDone(true);
         repository.addNew(done_task);
