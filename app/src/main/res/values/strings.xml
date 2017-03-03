@@ -25,4 +25,11 @@
     <string name="edit_title">Edit task</string>
     <string name="context_menu_title">Select the action</string>
 
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="alarm_hint">Add  notification</string>
+    <string name="no_notification">No notification</string>
+    <string name="ten_min_notification">10 minutes</string>
+    <string name="thirty_min_notification">30 minutes</string>
+    <string name="notification_title">Unforget it: time to&#8230;</string>
+
 </resources>

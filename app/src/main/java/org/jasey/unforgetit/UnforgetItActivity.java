@@ -1,7 +1,6 @@
 package org.jasey.unforgetit;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -14,6 +13,7 @@ import org.jasey.unforgetit.adapter.ActiveTaskViewAdapter;
 import org.jasey.unforgetit.adapter.DoneTaskViewAdapter;
 import org.jasey.unforgetit.adapter.TaskPagerAdapter;
 import org.jasey.unforgetit.adapter.TaskViewAdapter;
+import org.jasey.unforgetit.alarm.AlarmReceiver;
 import org.jasey.unforgetit.entity.Task;
 import org.jasey.unforgetit.fragment.AddTaskDialogFragment;
 import org.jasey.unforgetit.fragment.EditTaskDialogFragment;
@@ -28,12 +28,15 @@ public class UnforgetItActivity extends AppCompatActivity
         TaskViewAdapter.ContextMenuItemClickListener {
 
     private final static int PAGE_COUNT = 3;
+    public static boolean sActivityVisible;
+
 
     private ViewPager mPager;
     private FragmentStatePagerAdapter mPagerAdapter;
     private FloatingActionButton mAddFAB;
     private AddTaskDialogFragment mAddDialog;
     private EditTaskDialogFragment mEditDialog;
+    private AlarmReceiver mAlarmReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class UnforgetItActivity extends AppCompatActivity
         mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new TaskPagerAdapter(getSupportFragmentManager(), getApplicationContext(), PAGE_COUNT);
         mPager.setAdapter(mPagerAdapter);
+        mAlarmReceiver = new AlarmReceiver();
 
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -74,7 +78,6 @@ public class UnforgetItActivity extends AppCompatActivity
                 mPagerAdapter.notifyDataSetChanged();
             }
         });
-
     }
 
     @Override
@@ -87,15 +90,21 @@ public class UnforgetItActivity extends AppCompatActivity
     }
 
     @Override
-    public void onSaveClick(Task task) {
+    public void onSaveClick(Task task, int minutesForAlarm) {
         if (TaskRepository.getInstance(TaskRepository.Type.JPA, this).addNew(task)) {
             Toast.makeText(this, R.string.task_created_toast, Toast.LENGTH_SHORT).show();
         } else {
             TaskRepository.getInstance(TaskRepository.Type.JPA, this).update(task);
+            mAlarmReceiver.cancelAlarm(this, task);
             Toast.makeText(this, R.string.task_updated_toast, Toast.LENGTH_SHORT).show();
+        }
+        if (minutesForAlarm != 0) {
+            mAlarmReceiver.setAlarm(this, task, minutesForAlarm);
         }
         mPagerAdapter.notifyDataSetChanged();
     }
+
+
 
     @Override
     public void onActiveTaskImageClick(Task task) {
@@ -113,6 +122,7 @@ public class UnforgetItActivity extends AppCompatActivity
 
     @Override
     public void onDeleteActionClick(Task task) {
+        mAlarmReceiver.cancelAlarm(this, task);
         TaskRepository.getInstance(TaskRepository.Type.JPA, this).remove(task);
         mPagerAdapter.notifyDataSetChanged();
         Toast.makeText(this, R.string.task_deleted_toast, Toast.LENGTH_SHORT).show();
@@ -127,5 +137,17 @@ public class UnforgetItActivity extends AppCompatActivity
                 .addToBackStack(null)
                 .commit();
         mAddFAB.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sActivityVisible = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sActivityVisible = false;
     }
 }

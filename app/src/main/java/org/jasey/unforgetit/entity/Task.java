@@ -123,6 +123,7 @@ public class Task {
         if (done != task.done) return false;
         if (id != null ? !id.equals(task.id) : task.id != null) return false;
         if (!title.equals(task.title)) return false;
+
         return date.equals(task.date);
 
     }
@@ -135,5 +136,15 @@ public class Task {
         result = 31 * result + priorityLevel;
         result = 31 * result + (done ? 1 : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", date=" + date +
+                ", priorityLevel=" + priorityLevel +
+                '}';
     }
 }

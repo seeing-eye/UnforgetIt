@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -18,99 +19,156 @@
             app:titleTextAppearance="@style/ToolbarTitleText" />
     </android.support.design.widget.AppBarLayout>
 
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorWhite"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
+        android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/title_input_layout"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin">
-            <EditText
-                android:id="@+id/task_title"
+            android:background="@color/colorWhite"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/title_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/task_title_hint" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
 
-        <View style="@style/Divider"/>
+                <EditText
+                    android:id="@+id/task_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/task_title_hint" />
+            </android.support.design.widget.TextInputLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/priority_hint"
-            android:textColor="@color/textColorBlack87"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:labelFor="@+id/priority_group"/>
+            <View style="@style/Divider" />
 
-        <RadioGroup
-            android:id="@+id/priority_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/priority_group"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:text="@string/priority_hint"
+                android:textColor="@color/textColorBlack87"
+                android:drawableStart="@drawable/ic_traffic_black_24dp"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/textColorBlack38"/>
 
-            <RadioButton
-                android:id="@+id/priority_low"
+            <RadioGroup
+                android:id="@+id/priority_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="@string/low_priority"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:scaleX="0.9"
+                android:scaleY="0.9">
+
+                <RadioButton
+                    android:id="@+id/priority_low"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/low_priority"
+                    android:textColor="@color/textColorBlack87"/>
+
+                <RadioButton
+                    android:id="@+id/priority_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/normal_priority"
+                    android:textColor="@color/textColorBlack87" />
+
+                <RadioButton
+                    android:id="@+id/priority_high"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/high_priority"
+                    android:textColor="@color/textColorBlack87" />
+
+            </RadioGroup>
+
+            <View style="@style/Divider" />
+
+            <TextView
+                android:id="@+id/date_picker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:drawablePadding="10dp"
+                android:drawableStart="@drawable/ic_date_range_black_24dp"
+                android:drawableTint="@color/textColorBlack38"
+                android:hint="@string/date_hint"
+                android:paddingTop="@dimen/activity_vertical_margin"
                 android:textColor="@color/textColorBlack87" />
 
-            <RadioButton
-                android:id="@+id/priority_normal"
+            <TextView
+                android:id="@+id/time_picker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:drawablePadding="10dp"
+                android:drawableStart="@drawable/ic_av_timer_black_24dp"
+                android:drawableTint="@color/textColorBlack38"
+                android:hint="@string/time_hint"
+                android:textColor="@color/textColorBlack87" />
+
+            <View style="@style/Divider" />
+
+            <TextView
+                android:id="@+id/alarm_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="10dp"
+                android:drawableStart="@drawable/ic_alarm_black_24dp"
+                android:drawableTint="@color/textColorBlack38"
+                android:text="@string/alarm_hint"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:textColor="@color/textColorBlack87" />
+
+            <RadioGroup
+                android:id="@+id/notification_types"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/normal_priority"
-                android:textColor="@color/textColorBlack87" />
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:scaleX="0.9"
+                android:scaleY="0.9">
 
-            <RadioButton
-                android:id="@+id/priority_high"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="@string/high_priority"
-                android:textColor="@color/textColorBlack87" />
+                <RadioButton
+                    android:id="@+id/no_notification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/no_notification"
+                    android:textColor="@color/textColorBlack87"/>
 
-        </RadioGroup>
+                <RadioButton
+                    android:id="@+id/ten_min_notification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/ten_min_notification"
+                    android:textColor="@color/textColorBlack87" />
 
-        <View style="@style/Divider"/>
+                <RadioButton
+                    android:id="@+id/thirty_min_notification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/thirty_min_notification"
+                    android:textColor="@color/textColorBlack87" />
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/date_picker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:hint="@string/date_hint"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:drawableStart="@drawable/ic_date_range_black_24dp"
-            android:drawablePadding="10dp"
-            android:drawableTint="@color/textColorBlack38"
-            android:textColor="@color/textColorBlack87"/>
+            </RadioGroup>
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/time_picker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:hint="@string/time_hint"
-            android:drawableStart="@drawable/ic_av_timer_black_24dp"
-            android:drawablePadding="10dp"
-            android:drawableTint="@color/textColorBlack38"
-            android:textColor="@color/textColorBlack87"/>
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

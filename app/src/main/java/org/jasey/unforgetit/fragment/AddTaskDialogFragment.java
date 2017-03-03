@@ -10,7 +10,7 @@ public class AddTaskDialogFragment extends TaskDialogFragment {
 
     @Override
     protected void createMenu() {
-        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) mRootView.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.add_title);
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
