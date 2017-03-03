@@ -18,18 +18,17 @@
     <string name="title_alert_toast">Please, enter task title!</string>
     <string name="date_time_alert_toast">Please, pick date and time!</string>
     <string name="task_created_toast">New task created.</string>
-    <string name="task_updated_toast">Task updated!</string>
+    <string name="task_updated_toast">Task updated.</string>
     <string name="task_deleted_toast">Task deleted.</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="edit_title">Edit task</string>
     <string name="context_menu_title">Select the action</string>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="alarm_hint">Add  notification</string>
     <string name="no_notification">No notification</string>
     <string name="ten_min_notification">10 minutes</string>
     <string name="thirty_min_notification">30 minutes</string>
     <string name="notification_title">Unforget it: time to&#8230;</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

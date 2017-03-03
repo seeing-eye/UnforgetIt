@@ -121,7 +121,7 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
                                 dismiss();
                             }
                         })
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                             }
@@ -177,7 +177,7 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
                             c.set(Calendar.MINUTE, minute);
                             mTimePicker.setText(DateFormatUtils.format(c, Task.TIME_FORMAT));
                         }
-                    }, hour, minute, false);
+                    }, hour, minute, true);
             timePickerDialog.show();
         }
     }
