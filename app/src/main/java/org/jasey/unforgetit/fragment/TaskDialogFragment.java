@@ -88,14 +88,12 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
         //Save case
 
         if (id == R.id.action_save) {
-            if (mTask == null) {
-                mTask = new Task();
-            }
-
-            mTask.setPriorityLevel(getPriorityFromDialog());
-            mTask.setAlarmAdvanceTime(getAlarmAdvanceFromDialog());
-
             if (titleNotEmpty() && timeDateNotEmpty() && getDateFromDialog() != null) {
+                if (mTask == null) {
+                    mTask = new Task();
+                }
+                mTask.setPriorityLevel(getPriorityFromDialog());
+                mTask.setAlarmAdvanceTime(getAlarmAdvanceFromDialog());
                 mTask.setTitle(mTitle.getText().toString());
                 mTask.setDate(getDateFromDialog());
             } else {
