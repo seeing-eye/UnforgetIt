@@ -8,6 +8,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -22,8 +23,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AlarmReceiver extends WakefulBroadcastReceiver {
     public static final String TITLE = "title";
     public static final String ID = "id";
-    public static final String MIN_BEFORE_ALARM = "min before alarm";
+    public static final String ALARM_ADVANCE_TIME = "alarm advance";
     public static final String DATE = "date";
+    public static final String PRIORITY = "priority";
 
     private Map<Integer, PendingIntent> intentMap;
 
@@ -36,6 +38,21 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String title = intent.getStringExtra(TITLE);
         int id = intent.getIntExtra(ID, 0);
+        int color, icon;
+
+        switch (intent.getIntExtra(PRIORITY, 0)) {
+            case Task.PRIORITY_LOW:
+                color = R.color.colorBlue;
+                icon = R.drawable.white_low_priority;
+                break;
+            case Task.PRIORITY_NORMAL:
+                color = R.color.colorYellow;
+                icon = R.drawable.white_normal_priority;
+                break;
+            default:
+                color = R.color.colorRed;
+                icon = R.drawable.white_high_priority;
+        }
 
         Intent service = new Intent(context, UnforgetItActivity.class);
 
@@ -50,7 +67,8 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         Notification notification = new NotificationCompat.Builder(context)
                 .setContentTitle(context.getString(R.string.notification_title))
                 .setContentText(title)
-                .setSmallIcon(R.drawable.hight_priority)
+                .setColor(ContextCompat.getColor(context, color))
+                .setSmallIcon(icon)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true)
                 .setContentIntent(contentIntent)
@@ -65,19 +83,20 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         notificationManager.notify(id, notification);
     }
 
-    public void setAlarm(Context context, Task task, int minutes) {
+    public void setAlarm(Context context, Task task) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(context, AlarmReceiver.class);
         intent.putExtra(TITLE, task.getTitle());
         intent.putExtra(ID, task.getId().intValue());
-        intent.putExtra(MIN_BEFORE_ALARM, minutes);
+        intent.putExtra(ALARM_ADVANCE_TIME, task.getAlarmAdvanceTime());
         intent.putExtra(DATE, task.getDate().getTime());
+        intent.putExtra(PRIORITY, task.getPriorityLevel());
 
-        Log.d(this.getClass().getName(), "Init " + minutes + "min alarm for " + task);
+        Log.d(this.getClass().getName(), "Init " + task.getAlarmAdvanceTime() + "sec alarm for " + task);
 
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, task.getId().intValue(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, task.getDate().getTime() - minutes * 60000, alarmIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, task.getDate().getTime() - task.getAlarmAdvanceTime(), alarmIntent);
 
         intentMap.put(task.getId().intValue(), alarmIntent);
 
@@ -89,13 +108,13 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
         String title = intent.getStringExtra(TITLE);
         int id = (int) intent.getLongExtra(ID, 0);
-        int minutes = intent.getIntExtra(MIN_BEFORE_ALARM, 0);
+        int alarmAdvanceTime = intent.getIntExtra(ALARM_ADVANCE_TIME, 0);
         Long date = intent.getLongExtra(DATE, 0);
 
-        Log.d(this.getClass().getName(), "Reset " + minutes + "min alarm for task " + title);
+        Log.d(this.getClass().getName(), "Reset " + alarmAdvanceTime + "sec alarm for task " + title);
 
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, date - minutes * 60000, alarmIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, date - alarmAdvanceTime, alarmIntent);
 
         intentMap.put(id, alarmIntent);
 

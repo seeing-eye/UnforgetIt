@@ -59,23 +59,21 @@ public class EditTaskDialogFragment extends TaskDialogFragment {
         RadioButton tenNot = (RadioButton) mRootView.findViewById(R.id.ten_min_notification);
         RadioButton thirtyNot = (RadioButton) mRootView.findViewById(R.id.thirty_min_notification);
 
-        //TODO add long alarmDelay  variable to Task class??? How to save state of RadioButton??? Add const-s for 10 and 30 min delay.
-
-        /*switch (mTask.getPriorityLevel()) {
-            case Task.PRIORITY_LOW:
-                low.setChecked(true);
-                normal.setChecked(false);
-                high.setChecked(false);
+        switch (mTask.getAlarmAdvanceTime()) {
+            case Task.ALARM_ADVANCE_10:
+                noNot.setChecked(false);
+                tenNot.setChecked(true);
+                thirtyNot.setChecked(false);
                 break;
-            case Task.PRIORITY_NORMAL:
-                low.setChecked(false);
-                normal.setChecked(true);
-                high.setChecked(false);
+            case Task.ALARM_ADVANCE_30:
+                noNot.setChecked(false);
+                tenNot.setChecked(false);
+                thirtyNot.setChecked(true);
                 break;
             default:
-                low.setChecked(false);
-                normal.setChecked(false);
-                high.setChecked(true);
-        }*/
+                noNot.setChecked(true);
+                tenNot.setChecked(false);
+                thirtyNot.setChecked(false);
+        }
     }
 }

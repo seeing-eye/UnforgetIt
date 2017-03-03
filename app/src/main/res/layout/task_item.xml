@@ -10,11 +10,11 @@
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foregroundGravity="center"
         card_view:cardCornerRadius="20dp"
         card_view:cardElevation="@dimen/cardview_default_elevation"
         card_view:cardBackgroundColor="@color/colorCardBackground"
-        android:clickable="true">
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground">
 
         <RelativeLayout
             android:layout_width="match_parent"

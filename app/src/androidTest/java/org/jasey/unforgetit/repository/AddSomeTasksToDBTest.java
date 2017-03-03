@@ -8,7 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.j256.ormlite.table.TableUtils;
 
 import org.jasey.unforgetit.entity.Task;
-import org.jasey.unforgetit.utils.TaskUtil;
+import org.jasey.unforgetit.utils.DateUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +38,7 @@ public class AddSomeTasksToDBTest {
         task.setTitle("test_title");
         task.setPriorityLevel(Task.PRIORITY_LOW);
         task.setDone(false);
+        task.setAlarmAdvanceTime(Task.ALARM_ADVANCE_10);
         return task;
     }
 
@@ -45,40 +46,40 @@ public class AddSomeTasksToDBTest {
     public void add_one_task_test() {
 
         Task low_task = getTask();
-        low_task.setDate(TaskUtil.getDateOnMarch2017(28, 22, 0));
+        low_task.setDate(DateUtil.getDateOnMarch2017(3, 22, 0));
         low_task.setPriorityLevel(Task.PRIORITY_LOW);
         low_task.setTitle("Сходить в магазин.");
         repository.addNew(low_task);
 
         Task normal_task = getTask();
-        normal_task.setDate(TaskUtil.getDateOnMarch2017(28, 22, 0));
+        normal_task.setDate(DateUtil.getDateOnMarch2017(3, 22, 0));
         normal_task.setPriorityLevel(Task.PRIORITY_NORMAL);
         normal_task.setTitle("Полить помидорки.");
         repository.addNew(normal_task);
 
         Task hight_task = getTask();
-        hight_task.setDate(TaskUtil.getDateOnMarch2017(28, 22, 0));
+        hight_task.setDate(DateUtil.getDateOnMarch2017(3, 22, 0));
         hight_task.setPriorityLevel(Task.PRIORITY_HIGH);
         hight_task.setTitle("Покормить кота!");
         repository.addNew(hight_task);
 
         Task refused_task = getTask();
-        refused_task.setDate(TaskUtil.getDateOnMarch2017(28, 22, 0));
+        refused_task.setDate(DateUtil.getDateOnMarch2017(3, 22, 0));
         refused_task.setTitle("Позвонить тёще.");
         repository.addNew(refused_task);
-        refused_task.setDate(TaskUtil.getDateOnMarch2017(16, 9, 0));
+        refused_task.setDate(DateUtil.getDateOnMarch2017(3, 9, 0));
         refused_task.setTitle("Позвонить тёще.");
         repository.addNew(refused_task);
-        refused_task.setDate(TaskUtil.getDateOnMarch2017(17, 9, 0));
+        refused_task.setDate(DateUtil.getDateOnMarch2017(3, 9, 0));
         refused_task.setTitle("Позвонить тёще.");
         repository.addNew(refused_task);
 
         Task done_task = getTask();
-        done_task.setDate(TaskUtil.getDateOnMarch2017(28, 22, 0));
+        done_task.setDate(DateUtil.getDateOnMarch2017(3, 22, 0));
         done_task.setTitle("Посадить дерево.");
         done_task.setDone(true);
         repository.addNew(done_task);
-        done_task.setDate(TaskUtil.getDateOnMarch2017(28, 22, 0));
+        done_task.setDate(DateUtil.getDateOnMarch2017(3, 22, 0));
         done_task.setTitle("Построить дом.");
         done_task.setDone(true);
         repository.addNew(done_task);

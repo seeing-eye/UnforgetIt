@@ -43,7 +43,7 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
     protected Task mTask;
 
     public interface SaveTaskDialogListener {
-        void onSaveClick(Task task, int minutesForAlarm);
+        void onSaveClick(Task task);
     }
 
     @Override
@@ -93,6 +93,7 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
             }
 
             mTask.setPriorityLevel(getPriorityFromDialog());
+            mTask.setAlarmAdvanceTime(getAlarmAdvanceFromDialog());
 
             if (titleNotEmpty() && timeDateNotEmpty() && getDateFromDialog() != null) {
                 mTask.setTitle(mTitle.getText().toString());
@@ -101,7 +102,7 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
                 return false;
             }
 
-            mListener.onSaveClick(mTask, getMinutesForAlarm());
+            mListener.onSaveClick(mTask);
 
             dismiss();
             return true;
@@ -237,15 +238,15 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
         }
     }
 
-    private int getMinutesForAlarm() {
+    private int getAlarmAdvanceFromDialog() {
         switch (((RadioGroup) getView().findViewById(R.id.notification_types))
                 .getCheckedRadioButtonId()) {
             case R.id.no_notification:
                 return 0;
             case R.id.ten_min_notification:
-                return 10;
+                return Task.ALARM_ADVANCE_10;
             default:
-                return 30;
+                return Task.ALARM_ADVANCE_30;
         }
     }
 }

@@ -90,7 +90,7 @@ public class UnforgetItActivity extends AppCompatActivity
     }
 
     @Override
-    public void onSaveClick(Task task, int minutesForAlarm) {
+    public void onSaveClick(Task task) {
         if (TaskRepository.getInstance(TaskRepository.Type.JPA, this).addNew(task)) {
             Toast.makeText(this, R.string.task_created_toast, Toast.LENGTH_SHORT).show();
         } else {
@@ -98,8 +98,8 @@ public class UnforgetItActivity extends AppCompatActivity
             mAlarmReceiver.cancelAlarm(this, task);
             Toast.makeText(this, R.string.task_updated_toast, Toast.LENGTH_SHORT).show();
         }
-        if (minutesForAlarm != 0) {
-            mAlarmReceiver.setAlarm(this, task, minutesForAlarm);
+        if (task.getAlarmAdvanceTime() != 0) {
+            mAlarmReceiver.setAlarm(this, task);
         }
         mPagerAdapter.notifyDataSetChanged();
     }

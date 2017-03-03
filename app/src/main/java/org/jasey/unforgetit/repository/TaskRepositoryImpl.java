@@ -3,6 +3,7 @@ package org.jasey.unforgetit.repository;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.jasey.unforgetit.entity.Task;
@@ -34,11 +35,7 @@ public class TaskRepositoryImpl extends TaskRepository {
                 return false;
             }
 
-            ContentValues values = new ContentValues();
-            values.put(Task.TASK_TITLE_COLUMN, task.getTitle());
-            values.put(Task.TASK_DATE_COLUMN, task.getDate().getTime());
-            values.put(Task.TASK_PRIORITY_COLUMN, task.getPriorityLevel());
-            values.put(Task.TASK_DONE_COLUMN, task.isDone());
+            ContentValues values = fillContentValues(task);
 
             long id = helper
                     .getWritableDatabase()
@@ -83,11 +80,7 @@ public class TaskRepositoryImpl extends TaskRepository {
     public boolean update(Task task) {
         long stopwatch = System.currentTimeMillis();
         try {
-            ContentValues values = new ContentValues();
-            values.put(Task.TASK_TITLE_COLUMN, task.getTitle());
-            values.put(Task.TASK_DATE_COLUMN, task.getDate().getTime());
-            values.put(Task.TASK_PRIORITY_COLUMN, task.getPriorityLevel());
-            values.put(Task.TASK_DONE_COLUMN, task.isDone());
+            ContentValues values = fillContentValues(task);
 
             return helper
                     .getWritableDatabase()
@@ -98,6 +91,17 @@ public class TaskRepositoryImpl extends TaskRepository {
         } finally {
             Log.d(this.getClass().getName(), String.format(UPDATE + STOPWATCH, System.currentTimeMillis() - stopwatch));
         }
+    }
+
+    @NonNull
+    private ContentValues fillContentValues(Task task) {
+        ContentValues values = new ContentValues();
+        values.put(Task.TASK_TITLE_COLUMN, task.getTitle());
+        values.put(Task.TASK_DATE_COLUMN, task.getDate().getTime());
+        values.put(Task.TASK_PRIORITY_COLUMN, task.getPriorityLevel());
+        values.put(Task.TASK_DONE_COLUMN, task.isDone());
+        values.put(Task.TASK_ALARM_ADVANCE_TIME_COLUMN, task.getAlarmAdvanceTime());
+        return values;
     }
 
     @Override
@@ -117,8 +121,9 @@ public class TaskRepositoryImpl extends TaskRepository {
                     Date date = new Date(cursor.getLong(cursor.getColumnIndex(Task.TASK_DATE_COLUMN)));
                     int priority = cursor.getInt(cursor.getColumnIndex(Task.TASK_PRIORITY_COLUMN));
                     boolean done = cursor.getInt(cursor.getColumnIndex(Task.TASK_DONE_COLUMN)) == 1;
+                    int alarmAdvanceTime = cursor.getInt(cursor.getColumnIndex(Task.TASK_ALARM_ADVANCE_TIME_COLUMN));
 
-                    tasks.add(Task.buildTask(id, title, date, priority, done));
+                    tasks.add(Task.buildTask(id, title, date, priority, done, alarmAdvanceTime));
                 } while (cursor.moveToNext());
             }
             cursor.close();
