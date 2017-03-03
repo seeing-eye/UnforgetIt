@@ -35,7 +35,6 @@ public class UnforgetItActivity extends AppCompatActivity
     private FragmentStatePagerAdapter mPagerAdapter;
     private FloatingActionButton mAddFAB;
     private AddTaskDialogFragment mAddDialog;
-    private EditTaskDialogFragment mEditDialog;
     private AlarmReceiver mAlarmReceiver;
 
     @Override
@@ -67,7 +66,7 @@ public class UnforgetItActivity extends AppCompatActivity
         mAddFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAddFAB.setVisibility(View.INVISIBLE);
+                //mAddFAB.setVisibility(View.INVISIBLE);
 
                 mAddDialog = new AddTaskDialogFragment();
                 getSupportFragmentManager().beginTransaction()
@@ -130,13 +129,13 @@ public class UnforgetItActivity extends AppCompatActivity
 
     @Override
     public void onEditItemClick(Task task) {
-        mEditDialog = EditTaskDialogFragment.getInstance(task);
+        EditTaskDialogFragment mEditDialog = EditTaskDialogFragment.getInstance(task);
         getSupportFragmentManager().beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .replace(R.id.unforget_it_activity, mEditDialog)
                 .addToBackStack(null)
                 .commit();
-        mAddFAB.setVisibility(View.INVISIBLE);
+        //mAddFAB.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -149,5 +148,9 @@ public class UnforgetItActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
         sActivityVisible = false;
+    }
+
+    public void hideAddButton() {
+        mAddFAB.hide();
     }
 }

@@ -27,6 +27,7 @@ import android.widget.Toast;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jasey.unforgetit.R;
+import org.jasey.unforgetit.UnforgetItActivity;
 import org.jasey.unforgetit.entity.Task;
 
 import java.text.ParseException;
@@ -48,6 +49,7 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ((UnforgetItActivity) getActivity()).hideAddButton();
 
         mRootView = inflater.inflate(R.layout.task_dialog_fragment, container, false);
 
