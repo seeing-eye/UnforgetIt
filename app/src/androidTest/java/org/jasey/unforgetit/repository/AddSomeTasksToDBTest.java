@@ -18,8 +18,8 @@ import java.sql.SQLException;
 import java.util.Date;
 
 @RunWith(AndroidJUnit4.class)
-
 public class AddSomeTasksToDBTest {
+
     private TaskRepositoryJPAImpl repository;
 
     @Before
@@ -31,19 +31,19 @@ public class AddSomeTasksToDBTest {
         repository = (TaskRepositoryJPAImpl) TaskRepositoryJPAImpl.getInstance(context);
     }
 
+    public void add_task_with_low_priority() {
+
+    }
+
     @NonNull
     private Task getTask() {
         Task task = new Task();
         task.setDate(new Date());
-        task.setTitle("test_title");
-        task.setPriorityLevel(Task.PRIORITY_LOW);
-        task.setDone(false);
-        task.setAlarmAdvanceTime(Task.ALARM_ADVANCE_10);
         return task;
     }
 
-    @Test
-    public void add_one_task_test() {
+    @Test //TODO сделай и з меня нормальный тест
+    public void add_tasks_test() {
 
         Task low_task = getTask();
         low_task.setDate(DateUtil.getDateOnMarch2017(3, 22, 0));

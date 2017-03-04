@@ -1,5 +1,6 @@
 package org.jasey.unforgetit.fragment;
 
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,10 +11,17 @@ import org.jasey.unforgetit.R;
 import org.jasey.unforgetit.entity.Task;
 
 public class EditTaskDialogFragment extends TaskDialogFragment {
+
+
     public static EditTaskDialogFragment getInstance(Task task) {
         EditTaskDialogFragment fragment = new EditTaskDialogFragment();
         fragment.mTask = task;
         return fragment;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putLong(ID, mTask.getId());
     }
 
     @Override

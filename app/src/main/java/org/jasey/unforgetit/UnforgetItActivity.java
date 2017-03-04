@@ -1,13 +1,20 @@
 package org.jasey.unforgetit;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Iterables;
 
 import org.jasey.unforgetit.adapter.ActiveTaskViewAdapter;
 import org.jasey.unforgetit.adapter.DoneTaskViewAdapter;
@@ -20,6 +27,9 @@ import org.jasey.unforgetit.fragment.EditTaskDialogFragment;
 import org.jasey.unforgetit.fragment.TaskDialogFragment;
 import org.jasey.unforgetit.repository.TaskRepository;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class UnforgetItActivity extends AppCompatActivity
         implements
         TaskDialogFragment.SaveTaskDialogListener,
@@ -28,6 +38,8 @@ public class UnforgetItActivity extends AppCompatActivity
         TaskViewAdapter.ContextMenuItemClickListener {
 
     private final static int PAGE_COUNT = 3;
+    private final static int PERMISSION_REQUEST_CODE = 1;
+
     public static boolean sActivityVisible;
 
 
@@ -46,6 +58,7 @@ public class UnforgetItActivity extends AppCompatActivity
         mPagerAdapter = new TaskPagerAdapter(getSupportFragmentManager(), getApplicationContext(), PAGE_COUNT);
         mPager.setAdapter(mPagerAdapter);
         mAlarmReceiver = new AlarmReceiver();
+
 
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -66,8 +79,6 @@ public class UnforgetItActivity extends AppCompatActivity
         mAddFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mAddFAB.setVisibility(View.INVISIBLE);
-
                 mAddDialog = new AddTaskDialogFragment();
                 getSupportFragmentManager().beginTransaction()
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -77,6 +88,32 @@ public class UnforgetItActivity extends AppCompatActivity
                 mPagerAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    public void checkPermissionsAndRequest(List<String> permissions, int requestCode) {
+        List<String> notGranted = FluentIterable.from(permissions).filter(new Predicate<String>() {
+            @Override
+            public boolean apply(String permission) {
+                return ActivityCompat.checkSelfPermission(UnforgetItActivity.this, permission) != PackageManager.PERMISSION_GRANTED;
+            }
+        }).toList();
+        if (!notGranted.isEmpty()) {
+            ActivityCompat.requestPermissions(this, Iterables.toArray(notGranted, String.class), requestCode);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        checkPermissionsAndRequest(
+                Arrays.asList(
+                        Manifest.permission.RECEIVE_BOOT_COMPLETED,
+                        Manifest.permission.WAKE_LOCK,
+                        Manifest.permission.READ_CALENDAR,
+                        Manifest.permission.WRITE_CALENDAR,
+                        Manifest.permission.VIBRATE),
+                PERMISSION_REQUEST_CODE
+                );
     }
 
     @Override
@@ -97,12 +134,9 @@ public class UnforgetItActivity extends AppCompatActivity
             mAlarmReceiver.cancelAlarm(this, task);
             Toast.makeText(this, R.string.task_updated_toast, Toast.LENGTH_SHORT).show();
         }
-        if (task.getAlarmAdvanceTime() != 0) {
-            mAlarmReceiver.setAlarm(this, task);
-        }
+        mAlarmReceiver.setAlarm(this, task);
         mPagerAdapter.notifyDataSetChanged();
     }
-
 
 
     @Override
@@ -135,7 +169,6 @@ public class UnforgetItActivity extends AppCompatActivity
                 .replace(R.id.unforget_it_activity, mEditDialog)
                 .addToBackStack(null)
                 .commit();
-        //mAddFAB.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -152,5 +185,9 @@ public class UnforgetItActivity extends AppCompatActivity
 
     public void hideAddButton() {
         mAddFAB.hide();
+    }
+
+    public void showAddButton() {
+        mAddFAB.show();
     }
 }

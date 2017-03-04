@@ -24,11 +24,15 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jasey.unforgetit.R;
 import org.jasey.unforgetit.UnforgetItActivity;
 import org.jasey.unforgetit.entity.Task;
+import org.jasey.unforgetit.repository.TaskRepository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,6 +41,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public abstract class TaskDialogFragment extends DialogFragment implements View.OnClickListener {
+    public static final String ID = "ID";
+
     protected EditText mTitle;
     TextView mDatePicker, mTimePicker;
     protected View mRootView;
@@ -60,6 +66,17 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
 
         mDatePicker.setOnClickListener(this);
         mTimePicker.setOnClickListener(this);
+
+        if (savedInstanceState != null) {
+            final long id = savedInstanceState.getLong(ID, -1);
+            mTask = FluentIterable.from(TaskRepository.getInstance(TaskRepository.Type.JPA, getContext()).getAll())
+                    .filter(new Predicate<Task>() {
+                        @Override
+                        public boolean apply(Task task) {
+                            return task.getId() == id;
+                        }
+                    }).first().or(new Task());
+        }
 
         createMenu();
         setHasOptionsMenu(true);
@@ -90,14 +107,15 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
         //Save case
 
         if (id == R.id.action_save) {
-            if (titleNotEmpty() && timeDateNotEmpty() && getDateFromDialog() != null) {
+            Date date;
+            if (titleNotEmpty() && timeDateNotEmpty() && (date = getDateFromDialog()) != null) {
                 if (mTask == null) {
                     mTask = new Task();
                 }
                 mTask.setPriorityLevel(getPriorityFromDialog());
                 mTask.setAlarmAdvanceTime(getAlarmAdvanceFromDialog());
                 mTask.setTitle(mTitle.getText().toString());
-                mTask.setDate(getDateFromDialog());
+                mTask.setDate(date);
             } else {
                 return false;
             }
@@ -137,7 +155,7 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
     @Override
     public void onStop() {
         super.onStop();
-        getActivity().findViewById(R.id.add_fab).setVisibility(View.VISIBLE);
+        //getActivity().findViewById(R.id.add_fab).setVisibility(View.VISIBLE);
     }
 
     @Override

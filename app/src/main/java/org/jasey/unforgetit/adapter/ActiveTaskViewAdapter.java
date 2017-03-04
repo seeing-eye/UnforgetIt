@@ -42,22 +42,17 @@ public class ActiveTaskViewAdapter extends TaskViewAdapter {
     @Override
     protected void bindHolderAndTask(final TaskViewAdapter.TaskViewHolder taskViewHolder, final Task task) {
         super.bindHolderAndTask(taskViewHolder, task);
-
         switch (task.getPriorityLevel()) {
             case (Task.PRIORITY_LOW):
-                taskViewHolder.imageView.setImageResource(R.drawable.low_priority);
-                taskViewHolder.imageView.setBorderColorResource(R.color.colorBlue);
+                taskViewHolder.imageView.setImageResource(R.mipmap.ic_active_low);
                 break;
             case (Task.PRIORITY_NORMAL):
-                taskViewHolder.imageView.setImageResource(R.drawable.normal_priority);
-                taskViewHolder.imageView.setBorderColorResource(R.color.colorYellow);
+                taskViewHolder.imageView.setImageResource(R.mipmap.ic_active);
                 break;
             case (Task.PRIORITY_HIGH):
-                taskViewHolder.imageView.setImageResource(R.drawable.hight_priority);
-                taskViewHolder.imageView.setBorderColorResource(R.color.colorRed);
+                taskViewHolder.imageView.setImageResource(R.mipmap.ic_active_high);
                 break;
         }
-
 
         taskViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,8 +66,7 @@ public class ActiveTaskViewAdapter extends TaskViewAdapter {
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        taskViewHolder.imageView.setImageResource(R.drawable.done);
-                        taskViewHolder.imageView.setBorderColorResource(R.color.colorGreen);
+                        taskViewHolder.imageView.setImageResource(R.mipmap.ic_done);
                     }
 
                     @Override

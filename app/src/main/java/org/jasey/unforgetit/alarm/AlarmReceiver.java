@@ -8,6 +8,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.support.v7.app.NotificationCompat;
@@ -16,7 +17,10 @@ import android.util.Log;
 import org.jasey.unforgetit.R;
 import org.jasey.unforgetit.UnforgetItActivity;
 import org.jasey.unforgetit.entity.Task;
+import org.jasey.unforgetit.repository.TaskRepository;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,20 +42,22 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String title = intent.getStringExtra(TITLE);
         int id = intent.getIntExtra(ID, 0);
-        int color, icon;
+        int color = R.color.colorPrimary;
+        int largeIcon = R.mipmap.ic_launcher;
 
         switch (intent.getIntExtra(PRIORITY, 0)) {
             case Task.PRIORITY_LOW:
-                color = R.color.colorBlue;
-                icon = R.drawable.white_low_priority;
+                color = R.color.colorGreen;
+                largeIcon = R.mipmap.ic_active_low;
                 break;
             case Task.PRIORITY_NORMAL:
                 color = R.color.colorYellow;
-                icon = R.drawable.white_normal_priority;
+                largeIcon = R.mipmap.ic_active;
                 break;
-            default:
+            case Task.PRIORITY_HIGH:
                 color = R.color.colorRed;
-                icon = R.drawable.white_high_priority;
+                largeIcon = R.mipmap.ic_active_high;
+                break;
         }
 
         Intent service = new Intent(context, UnforgetItActivity.class);
@@ -68,7 +74,8 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 .setContentTitle(context.getString(R.string.notification_title))
                 .setContentText(title)
                 .setColor(ContextCompat.getColor(context, color))
-                .setSmallIcon(icon)
+                .setSmallIcon(R.drawable.ic_access_alarm_white_24dp)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), largeIcon))
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true)
                 .setContentIntent(contentIntent)
@@ -84,50 +91,42 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     }
 
     public void setAlarm(Context context, Task task) {
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        boolean isActive = !task.isDone() &&
+                            task.getAlarmAdvanceTime() != 0 &&
+                            new Date(task.getDate().getTime() + task.getAlarmAdvanceTime()).after(new Date());
+        if (isActive) {
 
-        Intent intent = new Intent(context, AlarmReceiver.class);
-        intent.putExtra(TITLE, task.getTitle());
-        intent.putExtra(ID, task.getId().intValue());
-        intent.putExtra(ALARM_ADVANCE_TIME, task.getAlarmAdvanceTime());
-        intent.putExtra(DATE, task.getDate().getTime());
-        intent.putExtra(PRIORITY, task.getPriorityLevel());
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        Log.d(this.getClass().getName(), "Init " + task.getAlarmAdvanceTime() + "sec alarm for " + task);
+            Intent intent = new Intent(context, AlarmReceiver.class);
+            intent.putExtra(TITLE, task.getTitle());
+            intent.putExtra(ID, task.getId().intValue());
+            intent.putExtra(ALARM_ADVANCE_TIME, task.getAlarmAdvanceTime());
+            intent.putExtra(DATE, task.getDate().getTime());
+            intent.putExtra(PRIORITY, task.getPriorityLevel());
 
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, task.getId().intValue(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, task.getDate().getTime() - task.getAlarmAdvanceTime(), alarmIntent);
+            Log.d(this.getClass().getName(), "Init " + task.getAlarmAdvanceTime() + "ms alarm for " + task);
 
-        intentMap.put(task.getId().intValue(), alarmIntent);
+            PendingIntent alarmIntent = PendingIntent.getBroadcast(context, task.getId().intValue(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, task.getDate().getTime() - task.getAlarmAdvanceTime(), alarmIntent);
 
-        setComponentEnabledSetting(context);
+            intentMap.put(task.getId().intValue(), alarmIntent);
+
+            ComponentName receiver = new ComponentName(context, AlarmReceiver.class);
+            PackageManager pm = context.getPackageManager();
+
+            pm.setComponentEnabledSetting(receiver,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP);
+
+        }
     }
 
-    public void setAlarm(Context context, Intent intent) {
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-        String title = intent.getStringExtra(TITLE);
-        int id = (int) intent.getLongExtra(ID, 0);
-        int alarmAdvanceTime = intent.getIntExtra(ALARM_ADVANCE_TIME, 0);
-        Long date = intent.getLongExtra(DATE, 0);
-
-        Log.d(this.getClass().getName(), "Reset " + alarmAdvanceTime + "sec alarm for task " + title);
-
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, date - alarmAdvanceTime, alarmIntent);
-
-        intentMap.put(id, alarmIntent);
-
-        setComponentEnabledSetting(context);
-    }
-
-    private void setComponentEnabledSetting(Context context) {
-        ComponentName receiver = new ComponentName(context, BootReceiver.class);
-        PackageManager pm = context.getPackageManager();
-
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
+    public void onBoot(Context context) {
+        List<Task> tasks = TaskRepository.getInstance(TaskRepository.Type.JPA, context).getAll();
+        for (Task task : tasks) {
+            setAlarm(context, task);
+        }
     }
 
     public void cancelAlarm(Context context, Task task) {
@@ -136,6 +135,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         if (alarmIntent != null) {
             Log.d(this.getClass().getName(), "Cancel " + alarmIntent);
             alarmManager.cancel(alarmIntent);
+            intentMap.remove(alarmIntent);
         }
     }
 }
