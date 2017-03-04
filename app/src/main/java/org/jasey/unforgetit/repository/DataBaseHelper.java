@@ -8,8 +8,8 @@ import android.util.Log;
 
 import org.jasey.unforgetit.entity.Task;
 
-public class DataBaseHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
+class DataBaseHelper extends SQLiteOpenHelper {
+    private static final int DATABASE_VERSION = 1;
 
     private static final String CREATE_TABLE_SCRIPT =
             "CREATE TABLE " + Task.TABLE_NAME +
@@ -33,7 +33,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         try {
-            Log.i(this.getClass().getName(), "onCreate");
+            Log.d(this.getClass().getName(), "onCreate");
             db.execSQL(CREATE_TABLE_SCRIPT);
         } catch (SQLException e) {
             Log.e(this.getClass().getName(), "Can't create database", e);
@@ -44,7 +44,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
-            Log.i(this.getClass().getName(), "onUpgrade");
+            Log.d(this.getClass().getName(), "onUpgrade");
             db.execSQL("DROP TABLE" + Task.TABLE_NAME);
             onCreate(db);
         } catch (SQLException e) {

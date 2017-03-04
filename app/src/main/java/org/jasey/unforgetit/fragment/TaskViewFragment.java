@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.jasey.unforgetit.R;
+import org.jasey.unforgetit.UnforgetItActivity;
 import org.jasey.unforgetit.entity.TaskType;
 
 public abstract class TaskViewFragment extends Fragment {
@@ -29,6 +30,7 @@ public abstract class TaskViewFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ((UnforgetItActivity) getActivity()).showAddButton();
         return inflater.inflate(R.layout.task_view_fragment, container, false);
     }
 

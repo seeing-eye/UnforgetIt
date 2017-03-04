@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">UnforgetIt</string>
+    <string name="active_tasks_title">ТЕКУЩИЕ ЗАДАЧИ</string>
+    <string name="time_is_out_title">ПРОСРОЧЕННЫЕ</string>
+    <string name="done_title">ВЫПОЛНЕННЫЕ</string>
+    <string name="task_title_hint">Задача</string>
+    <string name="add_title">Добавление</string>
+    <string name="save_button">Сохранить</string>
+    <string name="priority_hint">Выберите приоритет</string>
+    <string name="low_priority">Низкий</string>
+    <string name="normal_priority">Нормальный</string>
+    <string name="high_priority">Высокий</string>
+    <string name="date_hint">Выберите дату</string>
+    <string name="time_hint">Выберите время</string>
+    <string name="exit_message">Отменить изменения?</string>
+    <string name="discard">отменить</string>
+    <string name="error_empty_title">Введите название задачи</string>
+    <string name="title_alert_toast">Пожалуйста, введите название задачи!</string>
+    <string name="date_time_alert_toast">Пожалуйста, введите дату и время!</string>
+    <string name="task_created_toast">Новая задача создана.</string>
+    <string name="task_updated_toast">Задача отредактирована.</string>
+    <string name="task_deleted_toast">Задача удалена.</string>
+    <string name="edit">Редактировать</string>
+    <string name="delete">Удалить</string>
+    <string name="edit_title">Редактирование</string>
+    <string name="context_menu_title">Выберите действие</string>
+    <string name="alarm_hint">Выберите тип оповещения</string>
+    <string name="no_notification">Не напоминать</string>
+    <string name="ten_min_notification">Напомнить за 10 минут</string>
+    <string name="thirty_min_notification">Напомнить за 30 минут</string>
+    <string name="notification_title">Unforget it: пришло время&#8230;</string>
+    <string name="cancel">не отменять</string>
+
+</resources>

@@ -15,8 +15,7 @@ import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 class DataBaseJPAHelper extends OrmLiteSqliteOpenHelper {
-
-    public static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 1;
 
 
     private Dao<Task, Long> taskDAO;
@@ -43,7 +42,7 @@ class DataBaseJPAHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
-            Log.i(this.getClass().getName(), "onCreate");
+            Log.d(this.getClass().getName(), "onCreate");
             TableUtils.createTable(connectionSource, Task.class);
         } catch (SQLException e) {
             Log.e(this.getClass().getName(), "Can't create database", e);
@@ -55,7 +54,7 @@ class DataBaseJPAHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         try {
-            Log.i(this.getClass().getName(), "onUpgrade");
+            Log.d(this.getClass().getName(), "onUpgrade");
             TableUtils.dropTable(connectionSource, Task.class, true);
             onCreate(database, connectionSource);
         } catch (SQLException e) {

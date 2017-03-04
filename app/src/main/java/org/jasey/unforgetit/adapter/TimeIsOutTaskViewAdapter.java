@@ -33,7 +33,6 @@ class TimeIsOutTaskViewAdapter extends TaskViewAdapter {
     @Override
     protected void bindHolderAndTask(TaskViewHolder taskViewHolder, Task task) {
         super.bindHolderAndTask(taskViewHolder, task);
-            taskViewHolder.imageView.setImageResource(R.drawable.refused);
-            taskViewHolder.imageView.setBorderColorResource(R.color.colorRed);
+            taskViewHolder.imageView.setImageResource(R.mipmap.ic_overdeu);
     }
 }

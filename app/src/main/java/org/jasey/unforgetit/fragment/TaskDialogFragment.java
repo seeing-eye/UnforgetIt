@@ -24,10 +24,15 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jasey.unforgetit.R;
+import org.jasey.unforgetit.UnforgetItActivity;
 import org.jasey.unforgetit.entity.Task;
+import org.jasey.unforgetit.repository.TaskRepository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,11 +41,13 @@ import java.util.Date;
 import java.util.Locale;
 
 public abstract class TaskDialogFragment extends DialogFragment implements View.OnClickListener {
+    public static final String ID = "ID";
+
     protected EditText mTitle;
     TextView mDatePicker, mTimePicker;
-    protected View rootView;
+    protected View mRootView;
     private SaveTaskDialogListener mListener;
-    protected Task task;
+    protected Task mTask;
 
     public interface SaveTaskDialogListener {
         void onSaveClick(Task task);
@@ -48,21 +55,33 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ((UnforgetItActivity) getActivity()).hideAddButton();
 
-        rootView = inflater.inflate(R.layout.task_dialog_fragment, container, false);
+        mRootView = inflater.inflate(R.layout.task_dialog_fragment, container, false);
 
-        mTitle = (EditText) rootView.findViewById(R.id.task_title);
+        mTitle = (EditText) mRootView.findViewById(R.id.task_title);
 
-        mDatePicker = (TextView) rootView.findViewById(R.id.date_picker);
-        mTimePicker = (TextView) rootView.findViewById(R.id.time_picker);
+        mDatePicker = (TextView) mRootView.findViewById(R.id.date_picker);
+        mTimePicker = (TextView) mRootView.findViewById(R.id.time_picker);
 
         mDatePicker.setOnClickListener(this);
         mTimePicker.setOnClickListener(this);
 
+        if (savedInstanceState != null) {
+            final long id = savedInstanceState.getLong(ID, -1);
+            mTask = FluentIterable.from(TaskRepository.getInstance(TaskRepository.Type.JPA, getContext()).getAll())
+                    .filter(new Predicate<Task>() {
+                        @Override
+                        public boolean apply(Task task) {
+                            return task.getId() == id;
+                        }
+                    }).first().or(new Task());
+        }
+
         createMenu();
         setHasOptionsMenu(true);
 
-        return rootView;
+        return mRootView;
     }
 
     protected abstract void createMenu();
@@ -85,24 +104,29 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        //Save case
+
         if (id == R.id.action_save) {
-
-            if (task == null) {
-                task = new Task();
-            }
-
-            task.setPriorityLevel(getPriorityFromDialog());
-            if (titleNotEmpty() && timeDateNotEmpty() && getDateFromDialog() != null) {
-                task.setTitle(mTitle.getText().toString());
-                task.setDate(getDateFromDialog());
+            Date date;
+            if (titleNotEmpty() && timeDateNotEmpty() && (date = getDateFromDialog()) != null) {
+                if (mTask == null) {
+                    mTask = new Task();
+                }
+                mTask.setPriorityLevel(getPriorityFromDialog());
+                mTask.setAlarmAdvanceTime(getAlarmAdvanceFromDialog());
+                mTask.setTitle(mTitle.getText().toString());
+                mTask.setDate(date);
             } else {
                 return false;
             }
 
-            mListener.onSaveClick(task);
+            mListener.onSaveClick(mTask);
+
             dismiss();
             return true;
         }
+
+        //HOME case
         else if (id == android.R.id.home) {
             if (StringUtils.isEmpty(mTitle.getText().toString())) {
                 dismiss();
@@ -115,7 +139,7 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
                                 dismiss();
                             }
                         })
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                             }
@@ -131,22 +155,22 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
     @Override
     public void onStop() {
         super.onStop();
-        getActivity().findViewById(R.id.add_fab).setVisibility(View.VISIBLE);
+        //getActivity().findViewById(R.id.add_fab).setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onClick(View v) {
-        int mYear, mMonth, mDay, mHour, mMinute;
+        int year, month, day, hour, minute;
         final Calendar c = Calendar.getInstance();
-        if (task != null) {
-            c.setTime(task.getDate());
+        if (mTask != null) {
+            c.setTime(mTask.getDate());
         }
 
-        if (v == mDatePicker) {
+        if (v.equals(mDatePicker)) {
 
-            mYear = c.get(Calendar.YEAR);
-            mMonth = c.get(Calendar.MONTH);
-            mDay = c.get(Calendar.DAY_OF_MONTH);
+            year = c.get(Calendar.YEAR);
+            month = c.get(Calendar.MONTH);
+            day = c.get(Calendar.DAY_OF_MONTH);
 
             DatePickerDialog datePickerDialog = new DatePickerDialog(this.getContext(), new DatePickerDialog.OnDateSetListener() {
                 @Override
@@ -154,13 +178,13 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
                     c.set(year, month, dayOfMonth);
                     mDatePicker.setText(DateFormatUtils.format(c, Task.DATE_FORMAT));
                 }
-            }, mYear, mMonth, mDay);
+            }, year, month, day);
             datePickerDialog.show();
         }
 
-        if (v == mTimePicker) {
-            mHour = c.get(Calendar.HOUR_OF_DAY);
-            mMinute = c.get(Calendar.MINUTE);
+        if (v.equals(mTimePicker)) {
+            hour = c.get(Calendar.HOUR_OF_DAY);
+            minute = c.get(Calendar.MINUTE);
 
             TimePickerDialog timePickerDialog = new TimePickerDialog(this.getContext(),
                     new TimePickerDialog.OnTimeSetListener() {
@@ -171,7 +195,7 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
                             c.set(Calendar.MINUTE, minute);
                             mTimePicker.setText(DateFormatUtils.format(c, Task.TIME_FORMAT));
                         }
-                    }, mHour, mMinute, false);
+                    }, hour, minute, true);
             timePickerDialog.show();
         }
     }
@@ -213,8 +237,8 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
                     .parse(
                             mTimePicker.getText().toString() +
                                     Task.DELIMITER +
-                                    mDatePicker.getText().toString());}
-        catch (ParseException e) {
+                                    mDatePicker.getText().toString());
+        } catch (ParseException e) {
             Log.e(this.getClass().getName(), e.getMessage());
         }
         return date;
@@ -229,6 +253,18 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
                 return Task.PRIORITY_LOW;
             default:
                 return Task.PRIORITY_NORMAL;
+        }
+    }
+
+    private int getAlarmAdvanceFromDialog() {
+        switch (((RadioGroup) getView().findViewById(R.id.notification_types))
+                .getCheckedRadioButtonId()) {
+            case R.id.no_notification:
+                return 0;
+            case R.id.ten_min_notification:
+                return Task.ALARM_ADVANCE_10;
+            default:
+                return Task.ALARM_ADVANCE_30;
         }
     }
 }

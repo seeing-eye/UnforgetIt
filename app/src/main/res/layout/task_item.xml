@@ -10,11 +10,11 @@
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foregroundGravity="center"
         card_view:cardCornerRadius="20dp"
         card_view:cardElevation="@dimen/cardview_default_elevation"
         card_view:cardBackgroundColor="@color/colorCardBackground"
-        android:clickable="true">
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -23,10 +23,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_circle"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                card_view:border_width="2dp"
-                card_view:border_color="@color/cardview_dark_background" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/title"
