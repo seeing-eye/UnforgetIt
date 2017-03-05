@@ -25,8 +25,6 @@ public abstract class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.
     private static final int ID_DELETE = 102;
     protected static final AtomicBoolean IS_BUSY = new AtomicBoolean(false);
 
-    private ContextMenuItemClickListener mContextMenuItemClickListener;
-
     public interface ContextMenuItemClickListener {
         void onDeleteActionClick(Task task);
         void onEditItemClick(Task task);
@@ -100,13 +98,12 @@ public abstract class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-            mContextMenuItemClickListener = (ContextMenuItemClickListener) context;
             switch (item.getItemId()) {
                 case ID_DELETE:
-                    mContextMenuItemClickListener.onDeleteActionClick(findTasks().get(getLayoutPosition()));
+                    ((ContextMenuItemClickListener) context).onDeleteActionClick(findTasks().get(getLayoutPosition()));
                     return true;
                 case ID_EDIT:
-                    mContextMenuItemClickListener.onEditItemClick(findTasks().get(getLayoutPosition()));
+                    ((ContextMenuItemClickListener) context).onEditItemClick(findTasks().get(getLayoutPosition()));
                     return true;
             }
             return false;

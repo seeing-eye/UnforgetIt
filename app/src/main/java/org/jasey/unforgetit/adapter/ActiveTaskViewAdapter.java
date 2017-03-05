@@ -15,9 +15,13 @@ import org.jasey.unforgetit.repository.TaskRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ActiveTaskViewAdapter extends TaskViewAdapter {
-    private ActiveTaskAnimationListener mActiveTaskAnimationListener;
+    private static final BlockingQueue<Task> ACTIVE_TASKS_QUEUE = new LinkedBlockingQueue<>();
+    private static final AtomicInteger ACTIVE_TASK_COUNTER = new AtomicInteger(0);
 
     protected ActiveTaskViewAdapter(Context context) {
         super(context);
@@ -25,6 +29,7 @@ public class ActiveTaskViewAdapter extends TaskViewAdapter {
 
     public interface ActiveTaskAnimationListener {
         void onActiveTaskImageClick(Task task);
+        void updatePage();
     }
 
     @Override
@@ -57,56 +62,62 @@ public class ActiveTaskViewAdapter extends TaskViewAdapter {
         taskViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (IS_BUSY.compareAndSet(false, true)) {
-                    ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(taskViewHolder.imageView, "rotationY", -180f, 0f);
-                    rotateAnimator.setDuration(400);
-                    rotateAnimator.addListener(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart(Animator animation) {
+                ACTIVE_TASK_COUNTER.incrementAndGet();
+                ACTIVE_TASKS_QUEUE.offer(task);
+                ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(taskViewHolder.imageView, "rotationY", -180f, 0f);
+                rotateAnimator.setDuration(700);
+                rotateAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        taskViewHolder.imageView.setImageResource(R.mipmap.ic_done);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+                    }
+                });
+
+                final ObjectAnimator translateAnimator = ObjectAnimator.ofFloat(taskViewHolder.itemView, "translationX", 0f, taskViewHolder.itemView.getWidth());
+                translateAnimator.setDuration(700);
+                translateAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if (ACTIVE_TASK_COUNTER.decrementAndGet() == 0) {
+                            Task currentTask;
+                            while (ACTIVE_TASK_COUNTER.get() == 0 && (currentTask = ACTIVE_TASKS_QUEUE.poll()) != null) {
+                                ((ActiveTaskAnimationListener) context).onActiveTaskImageClick(currentTask);
+                            }
+                            if (ACTIVE_TASK_COUNTER.get() == 0) {
+                                ((ActiveTaskAnimationListener) context).updatePage();
+                            }
                         }
 
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            taskViewHolder.imageView.setImageResource(R.mipmap.ic_done);
-                        }
+                    }
 
-                        @Override
-                        public void onAnimationCancel(Animator animation) {
-                        }
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                    }
 
-                        @Override
-                        public void onAnimationRepeat(Animator animation) {
-                        }
-                    });
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+                    }
+                });
 
-                    final ObjectAnimator translateAnimator = ObjectAnimator.ofFloat(taskViewHolder.itemView, "translationX", 0f, taskViewHolder.itemView.getWidth());
-                    translateAnimator.setDuration(400);
-                    translateAnimator.addListener(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart(Animator animation) {
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mActiveTaskAnimationListener = (ActiveTaskAnimationListener) context;
-                            mActiveTaskAnimationListener.onActiveTaskImageClick(task);
-                            IS_BUSY.compareAndSet(true, false);
-                        }
-
-                        @Override
-                        public void onAnimationCancel(Animator animation) {
-                            IS_BUSY.compareAndSet(true, false);
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animator animation) {
-                        }
-                    });
-
-                    AnimatorSet animatorSet = new AnimatorSet();
-                    animatorSet.playSequentially(rotateAnimator, translateAnimator);
-                    animatorSet.start();
-                }
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.playSequentially(rotateAnimator, translateAnimator);
+                animatorSet.start();
             }
         });
     }
