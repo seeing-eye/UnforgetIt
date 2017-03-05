@@ -113,7 +113,7 @@ public class UnforgetItActivity extends AppCompatActivity
                         Manifest.permission.WRITE_CALENDAR,
                         Manifest.permission.VIBRATE),
                 PERMISSION_REQUEST_CODE
-                );
+        );
     }
 
     @Override
@@ -128,7 +128,7 @@ public class UnforgetItActivity extends AppCompatActivity
     @Override
     public void onSaveClick(Task task) {
         if (TaskRepository.getInstance(TaskRepository.Type.JPA, this).addNew(task)) {
-            Toast.makeText(this, R.string.task_created_toast, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.task_created_toast, Toast.LENGTH_LONG).show();
         } else {
             TaskRepository.getInstance(TaskRepository.Type.JPA, this).update(task);
             mAlarmReceiver.cancelAlarm(this, task);
@@ -171,9 +171,11 @@ public class UnforgetItActivity extends AppCompatActivity
                 .commit();
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
+        showAddButton();
         sActivityVisible = true;
     }
 

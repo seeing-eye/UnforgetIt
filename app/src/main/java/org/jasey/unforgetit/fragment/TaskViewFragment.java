@@ -27,6 +27,12 @@ public abstract class TaskViewFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((UnforgetItActivity) getActivity()).showAddButton();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
