@@ -19,6 +19,7 @@ import java.util.List;
 public class DoneTaskViewAdapter extends TaskViewAdapter {
     private DoneTaskAnimationListener mDoneTaskAnimationListener;
 
+
     public interface DoneTaskAnimationListener {
         void onDoneTaskImageClick(Task task);
     }
@@ -47,52 +48,27 @@ public class DoneTaskViewAdapter extends TaskViewAdapter {
         taskViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(taskViewHolder.imageView, "rotationY", -180f, 0f);
-                rotateAnimator.setDuration(500);
-                rotateAnimator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        switch (task.getPriorityLevel()) {
-                            case (Task.PRIORITY_LOW):
-                                taskViewHolder.imageView.setImageResource(R.mipmap.ic_active_low);
-                                break;
-                            case (Task.PRIORITY_NORMAL):
-                                taskViewHolder.imageView.setImageResource(R.mipmap.ic_active);
-                                break;
-                            case (Task.PRIORITY_HIGH):
-                                taskViewHolder.imageView.setImageResource(R.mipmap.ic_active_high);
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-                    }
-                });
-                ObjectAnimator translateAnimator;
-                if (task.getDate().before(new Date())) {
-                    translateAnimator = ObjectAnimator.ofFloat(taskViewHolder.itemView, "translationX", 0f, taskViewHolder.itemView.getWidth());
-                } else {
-                    translateAnimator = ObjectAnimator.ofFloat(taskViewHolder.itemView, "translationX", 0f, -taskViewHolder.itemView.getWidth());
-                }
-                    translateAnimator.setDuration(500);
-                    translateAnimator.addListener(new Animator.AnimatorListener() {
+                if (IS_BUSY.compareAndSet(false, true)) {
+                    ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(taskViewHolder.imageView, "rotationY", -180f, 0f);
+                    rotateAnimator.setDuration(400);
+                    rotateAnimator.addListener(new Animator.AnimatorListener() {
                         @Override
                         public void onAnimationStart(Animator animation) {
                         }
 
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            mDoneTaskAnimationListener = (DoneTaskViewAdapter.DoneTaskAnimationListener) context;
-                            mDoneTaskAnimationListener.onDoneTaskImageClick(task);
+                            switch (task.getPriorityLevel()) {
+                                case (Task.PRIORITY_LOW):
+                                    taskViewHolder.imageView.setImageResource(R.mipmap.ic_active_low);
+                                    break;
+                                case (Task.PRIORITY_NORMAL):
+                                    taskViewHolder.imageView.setImageResource(R.mipmap.ic_active);
+                                    break;
+                                case (Task.PRIORITY_HIGH):
+                                    taskViewHolder.imageView.setImageResource(R.mipmap.ic_active_high);
+                                    break;
+                            }
                         }
 
                         @Override
@@ -103,11 +79,40 @@ public class DoneTaskViewAdapter extends TaskViewAdapter {
                         public void onAnimationRepeat(Animator animation) {
                         }
                     });
+                    ObjectAnimator translateAnimator;
+                    if (task.getDate().before(new Date())) {
+                        translateAnimator = ObjectAnimator.ofFloat(taskViewHolder.itemView, "translationX", 0f, taskViewHolder.itemView.getWidth());
+                    } else {
+                        translateAnimator = ObjectAnimator.ofFloat(taskViewHolder.itemView, "translationX", 0f, -taskViewHolder.itemView.getWidth());
+                    }
+                    translateAnimator.setDuration(400);
+                    translateAnimator.addListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mDoneTaskAnimationListener = (DoneTaskViewAdapter.DoneTaskAnimationListener) context;
+                            mDoneTaskAnimationListener.onDoneTaskImageClick(task);
+                            IS_BUSY.compareAndSet(true, false);
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+                            IS_BUSY.compareAndSet(true, false);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+                        }
+                    });
 
 
-                AnimatorSet animatorSet = new AnimatorSet();
-                animatorSet.playSequentially(rotateAnimator, translateAnimator);
-                animatorSet.start();
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    animatorSet.playSequentially(rotateAnimator, translateAnimator);
+                    animatorSet.start();
+                }
             }
         });
     }

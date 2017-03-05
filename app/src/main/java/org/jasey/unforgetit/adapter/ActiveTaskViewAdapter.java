@@ -57,52 +57,56 @@ public class ActiveTaskViewAdapter extends TaskViewAdapter {
         taskViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(taskViewHolder.imageView, "rotationY", -180f, 0f);
-                rotateAnimator.setDuration(500);
-                rotateAnimator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                    }
+                if (IS_BUSY.compareAndSet(false, true)) {
+                    ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(taskViewHolder.imageView, "rotationY", -180f, 0f);
+                    rotateAnimator.setDuration(400);
+                    rotateAnimator.addListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                        }
 
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        taskViewHolder.imageView.setImageResource(R.mipmap.ic_done);
-                    }
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            taskViewHolder.imageView.setImageResource(R.mipmap.ic_done);
+                        }
 
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                    }
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+                        }
 
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-                    }
-                });
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+                        }
+                    });
 
-                ObjectAnimator translateAnimator = ObjectAnimator.ofFloat(taskViewHolder.itemView, "translationX", 0f, taskViewHolder.itemView.getWidth());
-                translateAnimator.setDuration(500);
-                translateAnimator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                    }
+                    final ObjectAnimator translateAnimator = ObjectAnimator.ofFloat(taskViewHolder.itemView, "translationX", 0f, taskViewHolder.itemView.getWidth());
+                    translateAnimator.setDuration(400);
+                    translateAnimator.addListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                        }
 
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mActiveTaskAnimationListener = (ActiveTaskAnimationListener) context;
-                        mActiveTaskAnimationListener.onActiveTaskImageClick(task);
-                    }
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mActiveTaskAnimationListener = (ActiveTaskAnimationListener) context;
+                            mActiveTaskAnimationListener.onActiveTaskImageClick(task);
+                            IS_BUSY.compareAndSet(true, false);
+                        }
 
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                    }
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+                            IS_BUSY.compareAndSet(true, false);
+                        }
 
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-                    }
-                });
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+                        }
+                    });
 
-                AnimatorSet animatorSet = new AnimatorSet();
-                animatorSet.playSequentially(rotateAnimator, translateAnimator);
-                animatorSet.start();
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    animatorSet.playSequentially(rotateAnimator, translateAnimator);
+                    animatorSet.start();
+                }
             }
         });
     }

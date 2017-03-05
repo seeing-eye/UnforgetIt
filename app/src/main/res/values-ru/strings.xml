@@ -17,7 +17,7 @@
     <string name="error_empty_title">Введите название задачи</string>
     <string name="title_alert_toast">Пожалуйста, введите название задачи!</string>
     <string name="date_time_alert_toast">Пожалуйста, введите дату и время!</string>
-    <string name="task_created_toast">Новая задача создана.</string>
+    <string name="task_created_toast">Новая задача создана. Нажмите на иконку задачи, чтобы отметить задачу выполненной.</string>
     <string name="task_updated_toast">Задача отредактирована.</string>
     <string name="task_deleted_toast">Задача удалена.</string>
     <string name="edit">Редактировать</string>

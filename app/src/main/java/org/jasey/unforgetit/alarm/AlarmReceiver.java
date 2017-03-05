@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.support.v7.app.NotificationCompat;
@@ -95,7 +96,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                             task.getAlarmAdvanceTime() != 0 &&
                             new Date(task.getDate().getTime() + task.getAlarmAdvanceTime()).after(new Date());
         if (isActive) {
-
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
             Intent intent = new Intent(context, AlarmReceiver.class);
@@ -108,7 +108,11 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
             Log.d(this.getClass().getName(), "Init " + task.getAlarmAdvanceTime() + "ms alarm for " + task);
 
             PendingIntent alarmIntent = PendingIntent.getBroadcast(context, task.getId().intValue(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, task.getDate().getTime() - task.getAlarmAdvanceTime(), alarmIntent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, task.getDate().getTime() - task.getAlarmAdvanceTime(), alarmIntent);
+            } else {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, task.getDate().getTime() - task.getAlarmAdvanceTime(), alarmIntent);
+            }
 
             intentMap.put(task.getId().intValue(), alarmIntent);
 

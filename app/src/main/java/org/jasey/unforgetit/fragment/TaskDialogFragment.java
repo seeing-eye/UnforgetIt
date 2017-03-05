@@ -54,6 +54,13 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        ((UnforgetItActivity) getActivity()).hideAddButton();
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ((UnforgetItActivity) getActivity()).hideAddButton();
 
@@ -130,6 +137,8 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
         else if (id == android.R.id.home) {
             if (StringUtils.isEmpty(mTitle.getText().toString())) {
                 dismiss();
+                ((UnforgetItActivity) getActivity()).showAddButton();
+
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage(R.string.exit_message)
@@ -137,6 +146,7 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dismiss();
+                                ((UnforgetItActivity) getActivity()).showAddButton();
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -155,7 +165,6 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
     @Override
     public void onStop() {
         super.onStop();
-        //getActivity().findViewById(R.id.add_fab).setVisibility(View.VISIBLE);
     }
 
     @Override

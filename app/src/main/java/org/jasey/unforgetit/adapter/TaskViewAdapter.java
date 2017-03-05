@@ -16,12 +16,14 @@ import org.jasey.unforgetit.entity.Task;
 import org.jasey.unforgetit.entity.TaskType;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public abstract class TaskViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int ID_EDIT = 101;
     private static final int ID_DELETE = 102;
+    protected static final AtomicBoolean IS_BUSY = new AtomicBoolean(false);
 
     private ContextMenuItemClickListener mContextMenuItemClickListener;
 
