@@ -42,7 +42,6 @@ public class UnforgetItActivity extends AppCompatActivity
 
     public static boolean sActivityVisible;
 
-
     private ViewPager mPager;
     private FragmentStatePagerAdapter mPagerAdapter;
     private FloatingActionButton mAddFAB;
@@ -143,6 +142,10 @@ public class UnforgetItActivity extends AppCompatActivity
     public void onActiveTaskImageClick(Task task) {
         task.setDone(true);
         TaskRepository.getInstance(TaskRepository.Type.JPA, this).update(task);
+    }
+
+    @Override
+    public void updatePage() {
         mPagerAdapter.notifyDataSetChanged();
     }
 
@@ -150,7 +153,6 @@ public class UnforgetItActivity extends AppCompatActivity
     public void onDoneTaskImageClick(Task task) {
         task.setDone(false);
         TaskRepository.getInstance(TaskRepository.Type.JPA, this).update(task);
-        mPagerAdapter.notifyDataSetChanged();
     }
 
     @Override
