@@ -46,7 +46,9 @@
                     android:id="@+id/task_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/task_title_hint" />
+                    android:hint="@string/task_title_hint">
+                </EditText>
+
             </android.support.design.widget.TextInputLayout>
 
             <View style="@style/Divider" />

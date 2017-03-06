@@ -108,8 +108,7 @@ public class UnforgetItActivity extends AppCompatActivity
                 Arrays.asList(
                         Manifest.permission.RECEIVE_BOOT_COMPLETED,
                         Manifest.permission.WAKE_LOCK,
-                        Manifest.permission.READ_CALENDAR,
-                        Manifest.permission.WRITE_CALENDAR,
+                        Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
                         Manifest.permission.VIBRATE),
                 PERMISSION_REQUEST_CODE
         );
