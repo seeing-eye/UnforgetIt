@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -67,6 +68,8 @@ public abstract class TaskDialogFragment extends DialogFragment implements View.
         mRootView = inflater.inflate(R.layout.task_dialog_fragment, container, false);
 
         mTitle = (EditText) mRootView.findViewById(R.id.task_title);
+        mTitle.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        mTitle.setSingleLine(true);
 
         mDatePicker = (TextView) mRootView.findViewById(R.id.date_picker);
         mTimePicker = (TextView) mRootView.findViewById(R.id.time_picker);
